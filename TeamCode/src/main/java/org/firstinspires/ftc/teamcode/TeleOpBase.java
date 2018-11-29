@@ -29,7 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import android.text.style.BulletSpan;
+
+//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -40,6 +42,7 @@ import com.qualcomm.robotcore.util.Range;
  * This file contains an example of an iterative (Non-Linear) "OpMode".
  * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
  * The names of OpModes appear on the menu of the FTC Driver Station.
+ * Roses are red, So is the state, Comrade you are great.
  * When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
  *
@@ -50,27 +53,28 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
-@Disabled
+@TeleOp(name="TeleOpBase", group="Iterative Opmode")
 public class TeleOpBase extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
+    private DcMotor lifter = null;
+    private DcMotor CollAjust = null;
 
     /*
      * Code to run ONCE when the driver hits INIT
      */
     @Override
     public void init() {
-        telemetry.addData("Status", "Initialized");
-
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        lifter = hardwareMap.get(DcMotor.class,"lifter");
+        CollAjust = hardwareMap.get(DcMotor.class, "collector");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -78,7 +82,7 @@ public class TeleOpBase extends OpMode
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
 
         // Tell the driver that initialization is complete.
-        telemetry.addData("Status", "Initialized");
+        telemetry.addData("Status", "Self Destruction Sequence Activated");
     }
 
     /*
@@ -99,8 +103,16 @@ public class TeleOpBase extends OpMode
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
+
     @Override
     public void loop() {
+
+        move();
+        doLifter();
+        doCollector();
+
+
+    /*
         // Setup a variable for each drive wheel to save power level for telemetry
         double leftPower;
         double rightPower;
@@ -127,8 +139,80 @@ public class TeleOpBase extends OpMode
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+  */
     }
 
+
+    private void doCollector() {
+        /* Collector To-Do:
+        Get collector design from builders
+        Write the code that operates the collector
+        Connect the collector to a button on controller
+        */
+
+
+
+        float CollAjustraw = gamepad2.right_stick_y;
+        float CollAjustbackraw = -gamepad2.right_stick_y;
+
+        double CollAjustData = Range.clip(CollAjustraw + 0, -1, 1);
+        double CollAjustBackData = Range.clip(CollAjustbackraw + 0, -1, 1);
+        double CollMot = Range.clip(CollAjustData - CollAjustBackData, -.5, .5);
+
+        if(CollMot == 0){
+            CollMot = -.2;
+        }
+
+        CollAjust.setPower(CollMot);
+
+
+
+
+
+
+    }
+
+
+     private void doLifter() {
+         //Lifter To-Do:
+         //Get lifter design from builders
+         //Write code that operates the lifter
+         //Connect the lifter to a button on the controller
+
+         float LifterYes = gamepad2.left_stick_y;
+         float LifterOpp = 0;
+         double LiftScale = .5;
+
+         double LifterActivate = Range.clip(LifterYes - LifterOpp, -1, 1) * LiftScale;
+
+         lifter.setPower(LifterActivate);
+
+     }
+
+
+
+
+
+
+
+    private void move() {
+        double scale = .5; //Sets scale to .5
+
+        double Drive = gamepad1.left_stick_y; //Sets Drive to how far the left joystick is pushed on the Y axis
+        double Turn = -gamepad1.left_stick_x; //Sets Turn to how far the left joystick is pushed on the X axis
+        double speedMode = gamepad1.right_trigger;
+
+        if(speedMode > .0000000001){
+            scale = 1;
+        }
+
+        double LeftMotPower = Range.clip(Drive + Turn, -1, 1) * scale; //Keeps the motor power inside -1 and 1
+        double RightMotPower = Range.clip(Drive - Turn, -1, 1) * scale; //Keeps motor power inside -1 and 1
+
+
+        leftDrive.setPower(LeftMotPower); //Renames variables to work with RC phone's config
+        rightDrive.setPower(RightMotPower); //Renames variables to work with RC phone's config
+    }
     /*
      * Code to run ONCE after the driver hits STOP
      */
