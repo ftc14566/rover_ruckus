@@ -152,12 +152,12 @@ public class TeleOpBase extends OpMode
 
 
 
-        float CollAjustraw = gamepad2.right_stick_y;
-        float CollAjustbackraw = -gamepad2.right_stick_y;
+        float CollAdjustRaw = gamepad2.right_stick_y;
+        float CollAdjustbackRaw = -gamepad2.right_stick_y;
 
-        double CollAjustData = Range.clip(CollAjustraw + 0, -1, 1);
-        double CollAjustBackData = Range.clip(CollAjustbackraw + 0, -1, 1);
-        double CollMot = Range.clip(CollAjustData - CollAjustBackData, -.5, .5);
+        double CollAdjustData = Range.clip(CollAdjustRaw + 0, -1, 1);
+        double CollAdjustBackData = Range.clip(CollAdjustbackRaw + 0, -1, 1);
+        double CollMot = Range.clip(CollAdjustData - CollAdjustBackData, -.5, .5);
 
         if(CollMot == 0){
             CollMot = -.2;
@@ -189,8 +189,6 @@ public class TeleOpBase extends OpMode
 
      }
 
-
-//This is a test
 
 
 
