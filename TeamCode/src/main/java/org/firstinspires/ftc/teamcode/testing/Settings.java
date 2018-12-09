@@ -5,17 +5,18 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 // base class for testing 1 function all on the AutoBot
 public abstract class Settings {
 
-	String _label;
-
-	DoubleParam[] params = new DoubleParam[4];
-	int paramIndex = 0;
+	protected Settings(String label){
+		_label = label;
+	}
 
 	public void nextParam(){
-		paramIndex = (paramIndex+1)%params.length;
+		++paramIndex;
+		if(paramIndex==params.length) paramIndex = 0;
 	}
 
 	public void prevParam(){
-		paramIndex = (paramIndex-1+ params.length)% params.length;
+		if(paramIndex==0) paramIndex = params.length;
+		--paramIndex;
 	}
 
 	public void incParam(){
@@ -26,11 +27,34 @@ public abstract class Settings {
 		params[paramIndex].dec();
 	}
 
-	public void showCurrentParameter(Telemetry telemetry){
-		DoubleParam p = params[paramIndex];
-		telemetry.addData(_label,  "%s = %3d  (%3d to %3d)",p._label,p.getCur(),p._min,p._max);
+	public void show(Telemetry telemetry){
+		showSummary( telemetry );
+		telemetry.addData("-","-");
+		showParamDetails(telemetry);
 		telemetry.update();
 	}
 
-	abstract public void Run(AutoBot bot);
+	void showSummary(Telemetry telemetry){
+		StringBuilder builder = new StringBuilder();
+		for(int i=0;i<params.length;++i){
+			builder.append(' ');
+			if(i==paramIndex){
+				builder.append((char)187);
+				builder.append((char)187);
+			}
+			builder.append(' ');
+			params[i].appendSummary(builder);
+		}
+		telemetry.addData(_label,  builder.toString() );
+	}
+
+	void showParamDetails(Telemetry telemetry){
+		params[paramIndex].showDetails(telemetry);
+	}
+
+	private String _label;
+	protected DoubleParam[] params = new DoubleParam[4];
+	private int paramIndex = 0;
+
+	abstract public void execute(AutoBot bot);
 }

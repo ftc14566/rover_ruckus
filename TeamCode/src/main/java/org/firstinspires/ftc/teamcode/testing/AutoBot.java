@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Used for autonomous mode
@@ -11,9 +9,9 @@ public class AutoBot extends TractorHardware {
 
 	public LinearOpMode OpMode;
 
-	public double     DRIVE_SPEED             = 0.6;
-	public double     TURN_SPEED              = 0.5;
-	final double wheelSeparation = 13/2;
+	public double	DRIVE_SPEED = 0.6;
+	public double	TURN_SPEED  = 0.5;
+	public double	wheelSeparation = 13/2; // wrong
 
 	public void travel(double inches, double timeoutS){
 		encoderDrive(DRIVE_SPEED, inches, inches, timeoutS);
@@ -29,8 +27,8 @@ public class AutoBot extends TractorHardware {
 		if (!OpMode.opModeIsActive()) { return; }
 
 		// Determine new target position, and pass to motor controller
-		leftWheel.initDrive(speed, leftInches);
-		rightWheel.initDrive(speed, rightInches);
+		leftWheel.startDriving(speed, leftInches);
+		rightWheel.startDriving(speed, rightInches);
 
 		doWheelsUntilDone(timeoutS);
 
@@ -43,8 +41,8 @@ public class AutoBot extends TractorHardware {
 		double leftMag = Math.abs(leftInches);
 		double rightMag = Math.abs(rightInches);
 		double averageMag = (leftMag + rightMag)/2;
-		leftWheel.initDrive(speed * leftMag/averageMag, leftInches);
-		rightWheel.initDrive(speed* rightMag/averageMag, rightInches);
+		leftWheel.startDriving(speed * leftMag/averageMag, leftInches);
+		rightWheel.startDriving(speed* rightMag/averageMag, rightInches);
 
 		doWheelsUntilDone(timeoutS);
 
@@ -57,6 +55,8 @@ public class AutoBot extends TractorHardware {
 				&& (leftWheel.isBusy() || rightWheel.isBusy())) {
 			leftWheel.showTelemetry(OpMode.telemetry);
 			rightWheel.showTelemetry(OpMode.telemetry);
+			OpMode.telemetry.addData("elapsed time", "%5.2f (s)", runtime.seconds() );
+
 			OpMode.telemetry.update();
 		}
 
