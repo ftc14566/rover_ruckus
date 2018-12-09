@@ -7,7 +7,11 @@ public class SettingsController extends NullButtonPressListener implements Butto
 	private Settings[] settings = new Settings[]{
 			new TravelSettings(),
 			new TurnSettings(),
-			new ArcSettings()
+			new ArcSettings(),
+			new EyeColorSettings(),
+			new LifterSettings(),
+			new CollectorSettings(),
+			new ServoSettings()
 	};
 	public Settings s;
 
@@ -18,9 +22,9 @@ public class SettingsController extends NullButtonPressListener implements Butto
 
 
 	@Override
-	public void onRightTriggerPressed() { changeSettingsIndex(1); }
+	public void onRightBumperPressed() { changeSettingsIndex(1); }
 	@Override
-	public void onLeftTriggerPressed() { changeSettingsIndex(-1);	}
+	public void onLeftBumperPressed() { changeSettingsIndex(-1);	}
 
 	void changeSettingsIndex(int delta){
 		settingsIndex = (settingsIndex+delta+settings.length) % settings.length;

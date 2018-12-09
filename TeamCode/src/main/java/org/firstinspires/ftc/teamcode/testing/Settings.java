@@ -38,12 +38,9 @@ public abstract class Settings {
 		StringBuilder builder = new StringBuilder();
 		for(int i=0;i<params.length;++i){
 			builder.append(' ');
-			if(i==paramIndex){
-				builder.append((char)187);
-				builder.append((char)187);
-			}
-			builder.append(' ');
+			if(i==paramIndex) builder.append("[");
 			params[i].appendSummary(builder);
+			if(i==paramIndex) builder.append("]");
 		}
 		telemetry.addData(_label,  builder.toString() );
 	}
@@ -53,7 +50,7 @@ public abstract class Settings {
 	}
 
 	private String _label;
-	protected DoubleParam[] params = new DoubleParam[4];
+	protected Parameter[] params = new Parameter[4];
 	private int paramIndex = 0;
 
 	abstract public void execute(AutoBot bot);

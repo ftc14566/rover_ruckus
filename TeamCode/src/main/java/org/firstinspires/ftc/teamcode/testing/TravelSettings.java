@@ -8,7 +8,7 @@ public class TravelSettings extends Settings {
 
 	public TravelSettings(){
 		super("Travel");
-		params = new DoubleParam[]{
+		params = new Parameter[]{
 				inches,
 				power,
 				timeoutS

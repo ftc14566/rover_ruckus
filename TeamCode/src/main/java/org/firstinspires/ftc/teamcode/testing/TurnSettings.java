@@ -4,7 +4,7 @@ public class TurnSettings extends Settings {
 
 	public TurnSettings(){
 		super("Turn");
-		params = new DoubleParam[]{
+		params = new Parameter[]{
 				degrees,
 				power,
 				wheelSeparation,

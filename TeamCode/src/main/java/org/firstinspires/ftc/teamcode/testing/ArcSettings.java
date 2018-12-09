@@ -10,7 +10,7 @@ public class ArcSettings extends Settings {
 
 	public ArcSettings(){
 		super("ArcPath");
-		params = new DoubleParam[]{ leftInches, rightInches, power, timeoutS };
+		params = new Parameter[]{ leftInches, rightInches, power, timeoutS };
 	}
 
 	@Override

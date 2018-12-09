@@ -9,7 +9,7 @@ public class DualPositionServo {
 	public double Position2;
 
 	public DualPositionServo(Servo servo, double pos1, double pos2){
-		servo = servo;
+		this.servo = servo;
 		Position1 = pos1;
 		Position2 = pos2;
 	}

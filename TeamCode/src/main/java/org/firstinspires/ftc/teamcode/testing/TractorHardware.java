@@ -31,4 +31,5 @@ class TractorHardware {
 		leftEye = hardwareMap.get(ColorSensor.class,"left_eye");
 		rightEye = hardwareMap.get(ColorSensor.class, "right_eye");
 	}
+
 }

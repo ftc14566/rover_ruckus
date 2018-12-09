@@ -16,6 +16,8 @@ public class MetricsMode extends LinearOpMode {
 		robot.init(hardwareMap);
 		robot.OpMode = this;
 
+		EyeColorSettings.register(hardwareMap);
+
 		SettingsController controller = new SettingsController(robot);
 		PressController pad = new PressController( gamepad1 );
 		pad.Listener = controller;
