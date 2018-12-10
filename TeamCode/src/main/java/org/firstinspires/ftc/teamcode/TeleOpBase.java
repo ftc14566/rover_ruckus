@@ -35,6 +35,8 @@ import android.text.style.BulletSpan;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -61,7 +63,8 @@ public class TeleOpBase extends OpMode
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor lifter = null;
-    private DcMotor CollAjust = null;
+    private DcMotor CollAdjust = null;
+    private Servo lifter_lock = null;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -74,7 +77,8 @@ public class TeleOpBase extends OpMode
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         lifter = hardwareMap.get(DcMotor.class,"lifter");
-        CollAjust = hardwareMap.get(DcMotor.class, "collector");
+        CollAdjust = hardwareMap.get(DcMotor.class, "collector");
+        lifter_lock = hardwareMap.get(Servo.class, "lifter_lock");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -163,7 +167,7 @@ public class TeleOpBase extends OpMode
             CollMot = -.2;
         }
 
-        CollAjust.setPower(CollMot);
+        CollAdjust.setPower(CollMot);
 
 
 
@@ -180,11 +184,35 @@ public class TeleOpBase extends OpMode
          //Connect the lifter to a button on the controller
 
          float LifterYes = gamepad2.left_stick_y;
+         boolean LockYes = gamepad2.left_stick_button;
+         float LockPos = 0;
          float LifterOpp = 0;
          double LiftScale = .5;
+         float LockGo = 0;
 
-         double LifterActivate = Range.clip(LifterYes - LifterOpp, -1, 1) * LiftScale;
+         if(LockPos == 1){
+             LockGo = 100;
+         }
+         if(LockPos == 0){
+             LockGo = 80;
+         }
+         if(LockPos == 1){
+             if(LockYes = true){
+                 LockGo = 80;
+                 LockPos = 0;
+             }
+         }
+         if(LockPos == 0){
+             if(LockYes = true){
+                 LockGo = 100;
+                 LockPos = 1;
+             }
+         }
 
+         double LifterActivate = Range.clip(LifterYes * LiftScale - LifterOpp * LiftScale, -1, 1);
+
+
+         lifter_lock.setPosition(LockGo);
          lifter.setPower(LifterActivate);
 
      }
