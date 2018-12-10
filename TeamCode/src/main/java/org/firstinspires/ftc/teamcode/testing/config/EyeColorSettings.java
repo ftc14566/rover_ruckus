@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.testing;
+package org.firstinspires.ftc.teamcode.testing.config;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -8,15 +8,21 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.testing.AutoBot;
+import org.firstinspires.ftc.teamcode.testing.ParamDouble;
+import org.firstinspires.ftc.teamcode.testing.Param;
+import org.firstinspires.ftc.teamcode.testing.ParamSelect;
+import org.firstinspires.ftc.teamcode.testing.Settings;
+
 public class EyeColorSettings extends Settings {
 
-	private SelectParameter eye = new SelectParameter("Eye",new String[]{"left","right"});
-	private SelectParameter led = new SelectParameter("LED",new String[]{"on","off"});
-	private DoubleParam duration = new DoubleParam("duration","s",8.0, 2.0, 30.0, 2);
+	private ParamSelect eye = new ParamSelect("Eye",new String[]{"left","right"});
+	private ParamSelect led = new ParamSelect("LED",new String[]{"on","off"});
+	private ParamDouble duration = new ParamDouble("duration","s",8.0, 2.0, 30.0, 2);
 
 	public EyeColorSettings(){
 		super("Eye Color");
-		params = new Parameter[]{ eye, led, duration};
+		params = new Param[]{ eye, led, duration};
 
 	}
 

@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode.testing;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.List;
 
 public class PressController {
 
+	private ElapsedTime timer;
+
 	public PressController(Gamepad gamepad){
+		timer = new ElapsedTime();
 		_gamepad = gamepad;
 	}
 
@@ -25,8 +29,12 @@ public class PressController {
 
 		if(whenPressed(PadLeft))  onPadLeftPressed();
 		if(whenPressed(PadRight)) onPadRightPressed();
-		if(whenPressed(PadUp))    onPadUpPressed();
-		if(whenPressed(PadDown))  onPadDownPressed();
+
+//		if(whenPressed(PadUp))    onPadUpPressed();
+//		if(whenPressed(PadDown))  onPadDownPressed();
+		onPadUpPressed( countPresses(PadUp) );
+		onPadDownPressed( countPresses(PadDown) );
+
 
 		if(whenPressed(LeftBumper))   onLeftBumperPressed();
 		if(whenPressed(RightBumper))  onRightBumperPressed();
@@ -37,6 +45,24 @@ public class PressController {
 		if(whenPressed(Guide)) onGuidePressed();
 		if(whenPressed(Start)) onStartPressed();
 
+	}
+
+	private int countPresses(int index){
+		// if button not pressed, no counts
+		if(!newState[index]) return 0;
+		// if button newly pressed, signal count and wait for 1 second
+		if(!lastState[index]){
+			incTime[index] = timer.seconds() + 1;
+			return 1;
+		}
+		// but is being held down
+		// inc total for every 200mS (past the initial 1 second) that button is held down
+		int total = 0;
+		while(incTime[index]<timer.seconds()){
+			total++;
+			incTime[index] += 0.2;
+		}
+		return total;
 	}
 
 	private boolean whenPressed(int index){
@@ -77,8 +103,8 @@ public class PressController {
 
 	protected void onPadLeftPressed(){Listener.onPadLeftPressed();}
 	protected void onPadRightPressed(){Listener.onPadRightPressed();}
-	protected void onPadUpPressed(){Listener.onPadUpPressed();}
-	protected void onPadDownPressed(){Listener.onPadDownPressed();}
+	protected void onPadUpPressed(int count){if(count>0) Listener.onPadUpPressed(count);}
+	protected void onPadDownPressed(int count){if(count>0) Listener.onPadDownPressed(count);}
 
 	protected void onLeftBumperPressed(){Listener.onLeftBumperPressed();}
 	protected void onRightBumperPressed(){Listener.onRightBumperPressed();}
@@ -111,5 +137,6 @@ public class PressController {
 	private Gamepad _gamepad;
 	private boolean[] newState = new boolean[15];
 	private boolean[] lastState = new boolean[15];
+	private double[] incTime = new double[15];
 
 }

@@ -1,15 +1,20 @@
-package org.firstinspires.ftc.teamcode.testing;
+package org.firstinspires.ftc.teamcode.testing.config;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.testing.AutoBot;
+import org.firstinspires.ftc.teamcode.testing.ParamDouble;
+import org.firstinspires.ftc.teamcode.testing.Param;
+import org.firstinspires.ftc.teamcode.testing.Settings;
+
 public class ServoSettings extends Settings {
 
-	private DoubleParam position = new DoubleParam("position","°",20.0, 0.0, 180.0, 5);
-	private DoubleParam duration = new DoubleParam("duration","s",20.0, 2.0, 60.0, 2);
+	private ParamDouble position = new ParamDouble("position","°",20.0, 0.0, 180.0, 5);
+	private ParamDouble duration = new ParamDouble("duration","s",20.0, 2.0, 60.0, 2);
 
 	public ServoSettings(){
 		super("Servo");
-		params = new Parameter[]{
+		params = new Param[]{
 				position,
 				duration
 		};

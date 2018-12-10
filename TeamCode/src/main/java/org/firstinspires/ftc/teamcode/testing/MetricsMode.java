@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.testing;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.testing.config.EyeColorSettings;
+
 // Used to test different times / speeds / powers for autonomouse mode.
 @TeleOp(name="Metrics Tester", group="Tractorbot")
 public class MetricsMode extends LinearOpMode {
@@ -18,7 +20,7 @@ public class MetricsMode extends LinearOpMode {
 
 		EyeColorSettings.register(hardwareMap);
 
-		SettingsController controller = new SettingsController(robot);
+		SettingsSelector controller = new SettingsSelector(robot);
 		PressController pad = new PressController( gamepad1 );
 		pad.Listener = controller;
 

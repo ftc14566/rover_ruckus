@@ -21,10 +21,10 @@ public class NullButtonPressListener implements ButtonPressListener {
 	public void onPadRightPressed() {}
 
 	@Override
-	public void onPadUpPressed() {}
+	public void onPadUpPressed(int count) {}
 
 	@Override
-	public void onPadDownPressed() {}
+	public void onPadDownPressed(int count) {}
 
 	@Override
 	public void onLeftBumperPressed() {}

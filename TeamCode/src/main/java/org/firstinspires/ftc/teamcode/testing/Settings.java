@@ -14,6 +14,8 @@ public abstract class Settings {
 		if(paramIndex==params.length) paramIndex = 0;
 	}
 
+	public void resetIndex(){ paramIndex=0; }
+
 	public void prevParam(){
 		if(paramIndex==0) paramIndex = params.length;
 		--paramIndex;
@@ -50,7 +52,7 @@ public abstract class Settings {
 	}
 
 	private String _label;
-	protected Parameter[] params = new Parameter[4];
+	protected Param[] params = new Param[4];
 	private int paramIndex = 0;
 
 	abstract public void execute(AutoBot bot);

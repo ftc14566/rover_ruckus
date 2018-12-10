@@ -1,21 +1,26 @@
-package org.firstinspires.ftc.teamcode.testing;
+package org.firstinspires.ftc.teamcode.testing.config;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.testing.AutoBot;
+import org.firstinspires.ftc.teamcode.testing.ParamDouble;
+import org.firstinspires.ftc.teamcode.testing.Param;
+import org.firstinspires.ftc.teamcode.testing.Settings;
+
 public class LifterSettings extends Settings {
 
-	private DoubleParam liftPower = new DoubleParam("Lift Power","%",-30.0, -100.0, 100.0, 1);
-	private DoubleParam liftDuration = new DoubleParam("Lift Duration","s",1.0, 0.0, 10.0, 0.2);
-	private DoubleParam dropPower = new DoubleParam("Lower Power","%",-5.0, -100.0, 100.0, 1);
-	private DoubleParam dropDuration = new DoubleParam("Lower Duration","s",1.0, 0.0, 10.0, 0.2);
+	private ParamDouble liftPower = new ParamDouble("Lift Power","%",-30.0, -100.0, 100.0, 1);
+	private ParamDouble liftDuration = new ParamDouble("Lift Duration","s",1.0, 0.0, 10.0, 0.2);
+	private ParamDouble dropPower = new ParamDouble("Lower Power","%",-5.0, -100.0, 100.0, 1);
+	private ParamDouble dropDuration = new ParamDouble("Lower Duration","s",1.0, 0.0, 10.0, 0.2);
 
-//	private SelectParameter zeroBehavior = new SelectParameter("0-Power Behavior",new String[]{"brake","float"});
-//	private DoubleParam zeroDuration = new DoubleParam("0-Duration","s",3.0, 0.0, 10.0, 0.5);
+//	private ParamSelect zeroBehavior = new ParamSelect("0-Power Behavior",new String[]{"brake","float"});
+//	private ParamDouble zeroDuration = new ParamDouble("0-Duration","s",3.0, 0.0, 10.0, 0.5);
 
 	public LifterSettings(){
 		super("Lifter");
-		params = new Parameter[]{liftPower, liftDuration,
+		params = new Param[]{liftPower, liftDuration,
 				dropPower, dropDuration,
 				//zeroBehavior, zeroDuration
 		};

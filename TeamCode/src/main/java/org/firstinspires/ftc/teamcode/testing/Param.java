@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing;
 
-interface Parameter {
+public interface Param {
 	void inc();
 
 	void dec();

@@ -4,13 +4,13 @@ import android.text.TextUtils;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class SelectParameter implements Parameter {
+public class ParamSelect implements Param {
 
 	private String _label;
 	private String[] _options;
 	private int _index = 0;
 
-	public SelectParameter(String label, String[] options){
+	public ParamSelect(String label, String[] options){
 		_label = label;
 		_options = options;
 	}

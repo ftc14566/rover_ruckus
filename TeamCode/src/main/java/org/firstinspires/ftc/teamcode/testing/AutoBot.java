@@ -68,11 +68,11 @@ public class AutoBot extends TractorHardware {
 	// time
 	// =============================================================================
 
-	public void DriveForTime(double power, double durationS ){
+	public void driveForTime(double power, double durationS ){
 		ArcForTime( power, power, durationS );
 	}
 
-	public void TurnRightForTime(double power, double durationS ){
+	public void turnRightForTime(double power, double durationS ){
 		ArcForTime( power, -power, durationS );
 	}
 

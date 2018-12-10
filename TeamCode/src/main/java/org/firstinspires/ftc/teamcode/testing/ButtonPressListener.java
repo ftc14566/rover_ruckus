@@ -9,8 +9,8 @@ public interface ButtonPressListener {
 
 	void onPadLeftPressed();
 	void onPadRightPressed();
-	void onPadUpPressed();
-	void onPadDownPressed();
+	void onPadUpPressed(int count);
+	void onPadDownPressed(int count);
 
 	void onLeftBumperPressed();
 	void onRightBumperPressed();
