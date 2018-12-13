@@ -30,6 +30,9 @@ public class ParamDouble implements Param {
 		_scale = scale;
 	}
 
+	String getFormat(){
+		return _step < 1.0 ? "%.1f" : "%.0f";
+	}
 
 	@Override
 	public void inc(){ _cur = Math.min(_cur+_step, _max); }
@@ -40,17 +43,18 @@ public class ParamDouble implements Param {
 
 	@Override
 	public void appendSummary(StringBuilder builder){
-		builder.append(String.format("%.2f",getCur()));
-		builder.append(' ');
+		builder.append(String.format(getFormat(),_cur)); // don't user getCur() because we don't want the value scaled here
+//		builder.append(' ');
 		builder.append(_units);
 	}
 
 	@Override
 	public void showDetails(org.firstinspires.ftc.robotcore.external.Telemetry telemetry){
 
-		// telemetry.addData(_label,  "%.2f (%s)  (Range: %.2f to %.2f)",getCur(),_units,_min,_max);
-		telemetry.addData(_label,  "%.2f",getCur());
+		String format = getFormat();
+
+		telemetry.addData(_label,  format,_cur); // don't use getCur() because that scales it.
 		telemetry.addData("Units",  "%s",_units);
-		telemetry.addData("Range",  "%.2f to %.2f",_min,_max);
+		telemetry.addData("Range",  format+" to "+format,_min,_max);
 	}
 }

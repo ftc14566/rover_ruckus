@@ -8,11 +8,8 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.testing.AutoBot;
-import org.firstinspires.ftc.teamcode.testing.ParamDouble;
-import org.firstinspires.ftc.teamcode.testing.Param;
-import org.firstinspires.ftc.teamcode.testing.ParamSelect;
-import org.firstinspires.ftc.teamcode.testing.Settings;
+import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.teamcode.testing.*;
 
 public class EyeColorSettings extends Settings {
 
@@ -37,7 +34,9 @@ public class EyeColorSettings extends Settings {
 	final float[] values = hsvValues;
 
 	@Override
-	public void execute(AutoBot bot) {
+	public void execute(ExecutionContext ctx) {
+
+		RobotHardware bot = ctx.robot;
 
 		double timeoutS = this.duration.getCur();
 
@@ -47,21 +46,21 @@ public class EyeColorSettings extends Settings {
 		eye.enableLed( ledOn );
 
 		ElapsedTime runtime = new ElapsedTime();
-		while (bot.OpMode.opModeIsActive() && runtime.seconds() < timeoutS ) {
+		while (ctx.opMode.opModeIsActive() && runtime.seconds() < timeoutS ) {
 
 			// convert the RGB values to HSV values.
 			Color.RGBToHSV(eye.red() * 8, eye.green() * 8, eye.blue() * 8, hsvValues);
-			bot.OpMode.telemetry.addData("Eye", this.eye.getCur() );
-			bot.OpMode.telemetry.addData("LED", ledOn ? "On" : "Off");
-			bot.OpMode.telemetry.addData("Red Green Blue Alpha", "R:%d  G:%d  B:%d  A:%d", eye.red(),eye.green(),eye.blue(),eye.alpha());
-			bot.OpMode.telemetry.addData("Hue Saturation Value", "H:%.2f  S:%.2f  V:%.2f", hsvValues[0],hsvValues[1],hsvValues[2]);
-			bot.OpMode.telemetry.addData("elapsed time", "%.0f", runtime.seconds());
+			ctx.opMode.telemetry.addData("Eye", this.eye.getCur() );
+			ctx.opMode.telemetry.addData("LED", ledOn ? "On" : "Off");
+			ctx.opMode.telemetry.addData("Red Green Blue Alpha", "R:%d  G:%d  B:%d  A:%d", eye.red(),eye.green(),eye.blue(),eye.alpha());
+			ctx.opMode.telemetry.addData("Hue Saturation Value", "H:%.2f  S:%.2f  V:%.2f", hsvValues[0],hsvValues[1],hsvValues[2]);
+			ctx.opMode.telemetry.addData("elapsed time", "%.0f", runtime.seconds());
 
 			relativeLayout.post(new Runnable() {
 				public void run() { relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values)); }
 			});
 
-			bot.OpMode.telemetry.update();
+			ctx.opMode.telemetry.update();
 		}
 
 		eye.enableLed(false);

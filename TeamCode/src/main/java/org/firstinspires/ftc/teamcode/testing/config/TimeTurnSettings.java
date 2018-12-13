@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing.config;
 
-import org.firstinspires.ftc.teamcode.testing.AutoBot;
-import org.firstinspires.ftc.teamcode.testing.ParamDouble;
-import org.firstinspires.ftc.teamcode.testing.Param;
-import org.firstinspires.ftc.teamcode.testing.Settings;
+import org.firstinspires.ftc.teamcode.testing.*;
 
 public class TimeTurnSettings extends Settings {
 
@@ -17,7 +14,7 @@ public class TimeTurnSettings extends Settings {
 	}
 
 	@Override
-	public void execute(AutoBot bot) {
-		bot.turnRightForTime( power.getCur(), duration.getCur() );
+	public void execute(ExecutionContext ctx) {
+//		ctx.turnRightForTime( power.getCur(), duration.getCur() );
 	}
 }

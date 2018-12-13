@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing.config;
 
-import org.firstinspires.ftc.teamcode.testing.AutoBot;
-import org.firstinspires.ftc.teamcode.testing.ParamDouble;
-import org.firstinspires.ftc.teamcode.testing.Param;
-import org.firstinspires.ftc.teamcode.testing.Settings;
+import org.firstinspires.ftc.teamcode.testing.*;
 
 public class TimeTravelSettings extends Settings {
 
@@ -16,8 +13,10 @@ public class TimeTravelSettings extends Settings {
 	}
 
 	@Override
-	public void execute(AutoBot bot) {
-		bot.driveForTime( power.getCur(), duration.getCur() );
+	public void execute(ExecutionContext ctx) {
+
+	//	ctx.robot.driveForTime( power.getCur(), duration.getCur());
+
 	}
 
 }

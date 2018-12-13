@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.testing;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 // base class for testing 1 function all on the AutoBot
@@ -7,7 +9,10 @@ public abstract class Settings {
 
 	protected Settings(String label){
 		_label = label;
+		this.params = params;
 	}
+
+	abstract public void execute(ExecutionContext bot);
 
 	public void nextParam(){
 		++paramIndex;
@@ -52,8 +57,8 @@ public abstract class Settings {
 	}
 
 	private String _label;
-	protected Param[] params = new Param[4];
+	protected Param[] params;
 	private int paramIndex = 0;
 
-	abstract public void execute(AutoBot bot);
 }
+

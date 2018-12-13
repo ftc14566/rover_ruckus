@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.testing;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -27,6 +28,14 @@ public class Wheel {
 			_dcMotor.setDirection(DcMotor.Direction.REVERSE);
 	}
 
+	public double getCurrentPosition(){
+		return _dcMotor.getCurrentPosition();
+	}
+
+	public boolean isBusy(){
+		return _dcMotor.isBusy();
+	}
+
 	public void startDriving(double speed, double inches) {
 		_dcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -38,8 +47,9 @@ public class Wheel {
 		_dcMotor.setPower(Math.abs(speed));
 	}
 
-	public double getCurrentPosition(){
-		return _dcMotor.getCurrentPosition();
+	public void stop(){
+		_dcMotor.setPower(0);
+		_dcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 	}
 
 	public void showTelemetry(Telemetry telemetry) {
@@ -47,13 +57,10 @@ public class Wheel {
 		telemetry.addData(_label, "%d => %d => %d", _startPos, current, _target);
 	}
 
-	public boolean isBusy(){
-		return _dcMotor.isBusy();
+	// Sets power, auto clipping between -1 and 1
+	public void setPower(double power) {
+		_dcMotor.setPower( Range.clip(power, -1, 1) );
 	}
 
-	public void stop(){
-		_dcMotor.setPower(0);
-		_dcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-	}
 
 }

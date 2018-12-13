@@ -1,18 +1,11 @@
 package org.firstinspires.ftc.teamcode.testing;
 
-import org.firstinspires.ftc.teamcode.testing.config.ArcSettings;
-import org.firstinspires.ftc.teamcode.testing.config.CollectorSettings;
-import org.firstinspires.ftc.teamcode.testing.config.EyeColorSettings;
-import org.firstinspires.ftc.teamcode.testing.config.LifterSettings;
-import org.firstinspires.ftc.teamcode.testing.config.ServoSettings;
-import org.firstinspires.ftc.teamcode.testing.config.TimeTravelSettings;
-import org.firstinspires.ftc.teamcode.testing.config.TimeTurnSettings;
-import org.firstinspires.ftc.teamcode.testing.config.TravelSettings;
-import org.firstinspires.ftc.teamcode.testing.config.TurnSettings;
+import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.teamcode.testing.config.*;
 
 public class SettingsSelector extends NullButtonPressListener implements ButtonPressListener {
 
-	private AutoBot _robot;
+	private ExecutionContext _ctx;
 	private int settingsIndex = 0;
 	private Settings[] settings = new Settings[]{
 			new TravelSettings(),
@@ -22,13 +15,14 @@ public class SettingsSelector extends NullButtonPressListener implements ButtonP
 			new LifterSettings(),
 			new CollectorSettings(),
 			new ServoSettings(),
-			new TimeTravelSettings(),
-			new TimeTurnSettings()
+			new DriverSettings()
+//			new TimeTravelSettings(),
+//			new TimeTurnSettings()
 	};
 	public Settings s;
 
-	public SettingsSelector(AutoBot robot){
-		_robot = robot;
+	public SettingsSelector(ExecutionContext ctx){
+		_ctx = ctx;
 		changeSettingsIndex(0); // initialize s;
 	}
 
@@ -56,5 +50,7 @@ public class SettingsSelector extends NullButtonPressListener implements ButtonP
 	public void onPadUpPressed(int count) { for(int i=0;i<count;++i) s.incParam(); }
 
 	@Override
-	public void onAButtonPressed() { s.execute(_robot); }
+	public void onAButtonPressed() {
+		s.execute(_ctx);
+	}
 }

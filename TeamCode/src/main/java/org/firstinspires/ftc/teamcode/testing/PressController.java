@@ -62,7 +62,7 @@ public class PressController {
 			total++;
 			incTime[index] += 0.2;
 		}
-		return total;
+		return total*2; // 5 presses per second is too slow, try 10
 	}
 
 	private boolean whenPressed(int index){
