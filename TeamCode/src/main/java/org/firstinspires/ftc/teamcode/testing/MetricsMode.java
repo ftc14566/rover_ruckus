@@ -18,6 +18,8 @@ public class MetricsMode extends LinearOpMode {
 		telemetry.addData("Status", "Initializing Autobot"); telemetry.update();
 		robot.init(hardwareMap);
 
+		robot.markerServo.servo.scaleRange(0,180);
+
 		EyeColorSettings.register(hardwareMap);
 
 		SettingsSelector controller = new SettingsSelector( new ExecutionContext(this,robot) );

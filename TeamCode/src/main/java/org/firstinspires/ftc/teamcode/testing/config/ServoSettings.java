@@ -23,7 +23,7 @@ public class ServoSettings extends Settings {
 		double delta = 0.01;
 
 		Servo servo = select.getCur() == "latch"
-				? ctx.robot.pinServo.servo
+				? ctx.robot.lifeter_lock.servo
 				: ctx.robot.markerServo.servo;
 
 		servo.setPosition( pos );
@@ -56,7 +56,7 @@ public class ServoSettings extends Settings {
 //		while (ctx.opMode.opModeIsActive() && runtime.seconds() < timeoutS ) {
 //
 //		ctx.opMode.telemetry.addData("Token", "%.1f", ctx.robot.markerServo.servo.getPosition() );
-//		ctx.opMode.telemetry.addData("Latch", "%.1f", ctx.robot.pinServo.servo.getPosition() );
+//		ctx.opMode.telemetry.addData("Latch", "%.1f", ctx.robot.lifeter_lock.servo.getPosition() );
 //		ctx.opMode.telemetry.update();
 //	}
 

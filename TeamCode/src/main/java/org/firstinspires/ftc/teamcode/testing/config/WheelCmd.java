@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.testing.config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.teamcode.testing.HardwareTractor2;
 import org.firstinspires.ftc.teamcode.testing.ExecutionContext;
 import org.firstinspires.ftc.teamcode.testing.Wheel;
 
@@ -19,7 +19,7 @@ public abstract class WheelCmd implements Cmd  {
 
 	public  void exec( ExecutionContext ctx) {
 		LinearOpMode opMode = ctx.opMode;
-		RobotHardware robot = ctx.robot;
+		HardwareTractor2 robot = ctx.robot;
 
 		if (!opMode.opModeIsActive()) { return; }
 
