@@ -23,8 +23,8 @@ public class ServoSettings extends Settings {
 		double delta = 0.01;
 
 		Servo servo = select.getCur() == "latch"
-				? ctx.robot.lifeter_lock.servo
-				: ctx.robot.markerServo.servo;
+				? ctx.robot.lifter_lock
+				: ctx.robot.marker_servo;
 
 		servo.setPosition( pos );
 

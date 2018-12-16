@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.testing.*;
 
 public class EyeColorSettings extends Settings {
@@ -36,11 +35,11 @@ public class EyeColorSettings extends Settings {
 	@Override
 	public void execute(ExecutionContext ctx) {
 
-		RobotHardware bot = ctx.robot;
+		HardwareTractor2 bot = ctx.robot;
 
 		double timeoutS = this.duration.getCur();
 
-		ColorSensor eye = this.eye.getCur() == "left" ? bot.leftEye : bot.rightEye;
+		ColorSensor eye = this.eye.getCur() == "left" ? bot.left_eye : bot.right_eye;
 
 		boolean ledOn = led.getCur()=="on";
 		eye.enableLed( ledOn );

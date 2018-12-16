@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.testing.config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.testing.*;
 
 public class LifterSettings extends Settings {
@@ -26,7 +25,7 @@ public class LifterSettings extends Settings {
 
 	@Override
 	public void execute(ExecutionContext ctx) {
-		RobotHardware bot = ctx.robot;
+		HardwareTractor2 bot = ctx.robot;
 		bot.lifter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // should already be the default.
 
 //		DcMotor.ZeroPowerBehavior zeroPower = this.zeroBehavior.getCur()=="brake"
@@ -43,7 +42,7 @@ public class LifterSettings extends Settings {
 	}
 
 	private void run( ExecutionContext ctx, String label, double power, double timeoutS ) {
-		RobotHardware bot = ctx.robot;
+		HardwareTractor2 bot = ctx.robot;
 		ElapsedTime runtime = new ElapsedTime();
 		bot.lifter.setPower( power );
 		while (ctx.opMode.opModeIsActive() && runtime.seconds() < timeoutS ) {

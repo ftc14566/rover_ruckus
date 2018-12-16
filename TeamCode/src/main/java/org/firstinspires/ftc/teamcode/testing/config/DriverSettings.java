@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.testing.config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.testing.*;
 
 public class DriverSettings extends Settings {
@@ -20,7 +19,7 @@ public class DriverSettings extends Settings {
 	@Override
 	public void execute(ExecutionContext ctx) {
 
-		RobotHardware bot = ctx.robot;
+		HardwareTractor2 bot = ctx.robot;
 		Gamepad pad = ctx.opMode.gamepad1;
 
 		String strMode = this.config.getCur();
