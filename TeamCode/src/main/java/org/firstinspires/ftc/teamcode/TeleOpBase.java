@@ -177,7 +177,8 @@ public class TeleOpBase extends OpMode
     }
 
 
-     private void doLifter() {
+    float LockPast = 0;
+    private void doLifter() {
          //Lifter To-Do:
          //Get lifter design from builders
          //Write code that operates the lifter
@@ -211,8 +212,10 @@ public class TeleOpBase extends OpMode
 
          double LifterActivate = Range.clip(LifterYes * LiftScale - LifterOpp * LiftScale, -1, 1);
 
-
-         lifter_lock.setPosition(LockGo);
+         if(LockPast != LockGo){
+            lifter_lock.setPosition(LockGo);
+            LockPast = LockGo;
+         }
          lifter.setPower(LifterActivate);
 
      }
