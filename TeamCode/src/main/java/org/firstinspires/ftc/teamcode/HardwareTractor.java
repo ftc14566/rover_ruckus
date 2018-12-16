@@ -1,12 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-
-import org.firstinspires.ftc.teamcode.testing.Wheel;
-
+import com.qualcomm.robotcore.hardware.*;
 
 // All the hardware on our Tractor-bot
 public class HardwareTractor {
