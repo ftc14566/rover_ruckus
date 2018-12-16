@@ -55,7 +55,11 @@ public class ConceptScanServo extends LinearOpMode {
     static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
     static final int    CYCLE_MS    =   50;     // period of each cycle
     static final double MAX_POS     =  1.0;     // Maximum rotational position
-    static final double MIN_POS     =  0.0;     // Minimum rotational position
+    private static final double MIN_POS;     // Minimum rotational position
+
+    static {
+        MIN_POS = 0.0;
+    }
 
     // Define class members
     Servo   servo;
