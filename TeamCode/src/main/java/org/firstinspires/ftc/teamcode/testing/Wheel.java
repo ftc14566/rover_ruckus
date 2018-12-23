@@ -20,12 +20,9 @@ public class Wheel {
 	private int _target;
 	private int _startPos;
 
-	public Wheel(DcMotor motor, String label, boolean reverse){
+	public Wheel(DcMotor motor, String label){
 		_dcMotor = motor;
 		_label = label;
-
-		if( reverse )
-			_dcMotor.setDirection(DcMotor.Direction.REVERSE);
 	}
 
 	public double getCurrentPosition(){

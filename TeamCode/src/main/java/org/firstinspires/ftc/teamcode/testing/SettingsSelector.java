@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.testing.config.*;
 
 public class SettingsSelector extends NullButtonPressListener implements ButtonPressListener {
@@ -11,12 +12,10 @@ public class SettingsSelector extends NullButtonPressListener implements ButtonP
 			new TurnSettings(),
 			new ArcSettings(),
 			new EyeColorSettings(),
-			new LifterSettings(),
+			new DoubleLifterSettings(),
 			new CollectorSettings(),
 			new ServoSettings(),
 			new DriverSettings()
-//			new TimeTravelSettings(),
-//			new TimeTurnSettings()
 	};
 	public Settings s;
 
@@ -52,4 +51,9 @@ public class SettingsSelector extends NullButtonPressListener implements ButtonP
 	public void onAButtonPressed() {
 		s.execute(_ctx);
 	}
+
+	public void showStatus( Telemetry telemetry ){
+		s.show(telemetry);
+	}
+
 }

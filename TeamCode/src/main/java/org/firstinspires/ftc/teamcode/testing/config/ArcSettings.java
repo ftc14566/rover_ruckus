@@ -17,8 +17,12 @@ public class ArcSettings extends Settings {
 
 	@Override
 	public void execute(ExecutionContext ctx ){
-		ArcCmd cmd = new ArcCmd( leftInches.getCur(), rightInches.getCur(), power.getCur(), timeoutS.getCur() );
-		cmd.exec(ctx);
+		buildCommand().exec(ctx);
+	}
+
+	@Override
+	public Cmd buildCommand() {
+		return new ArcCmd( leftInches.getCur(), rightInches.getCur(), power.getCur(), timeoutS.getCur() );
 	}
 
 }

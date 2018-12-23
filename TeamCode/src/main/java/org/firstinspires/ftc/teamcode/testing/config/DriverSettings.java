@@ -45,6 +45,11 @@ public class DriverSettings extends Settings {
 
 	}
 
+	@Override
+	public Cmd buildCommand() {
+		return null;
+	}
+
 	DriveMode buildDriver(String mode, DcMotor.RunMode runMode){
 		double scale = this.scale.getCur();
 		switch( mode ){

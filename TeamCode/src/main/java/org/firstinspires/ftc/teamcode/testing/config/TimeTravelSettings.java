@@ -13,10 +13,8 @@ public class TimeTravelSettings extends Settings {
 	}
 
 	@Override
-	public void execute(ExecutionContext ctx) {
-
-	//	ctx.robot.driveForTime( power.getCur(), duration.getCur());
-
+	public Cmd buildCommand() {
+		return null;
 	}
 
 }
