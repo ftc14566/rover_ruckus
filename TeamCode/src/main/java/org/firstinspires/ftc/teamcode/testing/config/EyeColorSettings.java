@@ -74,4 +74,9 @@ public class EyeColorSettings extends Settings {
 
 	}
 
+	@Override
+	public Cmd buildCommand() {
+		return null;
+	}
+
 }

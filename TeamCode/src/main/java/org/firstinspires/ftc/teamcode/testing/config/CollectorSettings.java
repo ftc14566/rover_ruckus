@@ -37,5 +37,10 @@ public class CollectorSettings extends Settings {
 
 	}
 
+	@Override
+	public Cmd buildCommand() {
+		return null;
+	}
+
 
 }
