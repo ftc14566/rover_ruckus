@@ -20,4 +20,10 @@ public class LifterSettings extends Settings {
 		return new LifterCmd( liftPower.getCur(), "Lifter", liftDuration.getCur());
 	}
 
+	public void init(LifterCmd cmd ){
+		_label = cmd.getLabe();
+		liftPower.setCur( cmd.getPower() );
+		liftDuration.setCur( cmd.getTimeout() );
+	}
+
 }

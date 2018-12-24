@@ -16,6 +16,11 @@ public class ServoSettings extends Settings {
 		params = new Param[] { select, position };
 	}
 
+	public void init(ServoCmd cmd){
+		select.setCur(cmd.getSelect());
+		position.setCur(cmd.getPosition());
+	}
+
 	@Override
 	public Cmd buildCommand() {
 		return new ServoCmd(select.getCur(),position.getCur());
