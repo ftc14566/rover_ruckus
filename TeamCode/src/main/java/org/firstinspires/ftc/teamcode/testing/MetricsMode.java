@@ -3,14 +3,15 @@ package org.firstinspires.ftc.teamcode.testing;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.teamcode.HardwareTractor;
+import org.firstinspires.ftc.teamcode.HardwareTractor;
 import org.firstinspires.ftc.teamcode.testing.config.EyeColorSettings;
 
 // Used to test different times / speeds / powers for autonomouse mode.
 @TeleOp(name="Metrics Tester", group="Tractorbot")
 public class MetricsMode extends LinearOpMode {
 
-	RobotHardware robot   = new RobotHardware();
+	HardwareTractor2 robot = new HardwareTractor2();
 
 	@Override
 	public void runOpMode() {
@@ -18,11 +19,11 @@ public class MetricsMode extends LinearOpMode {
 		telemetry.addData("Status", "Initializing Autobot"); telemetry.update();
 		robot.init(hardwareMap);
 
-		robot.markerServo.servo.scaleRange(0,180);
+		robot.marker_servo.scaleRange(0,180);
 
 		EyeColorSettings.register(hardwareMap);
 
-		SettingsSelector controller = new SettingsSelector( new ExecutionContext(this,robot) );
+		SettingsSelector controller = new SettingsSelector(new ExecutionContext(this,robot));
 		PressController pad = new PressController( gamepad1 );
 		pad.Listener = controller;
 

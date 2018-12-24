@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.testing.config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.teamcode.HardwareTractor;
 import org.firstinspires.ftc.teamcode.testing.*;
 
 public class CollectorSettings extends Settings {
@@ -20,7 +20,7 @@ public class CollectorSettings extends Settings {
 	@Override
 	public void execute(ExecutionContext ctx) {
 
-		RobotHardware bot = ctx.robot;
+		HardwareTractor bot = ctx.robot;
 
 		double timeoutS = this.timeoutS.getCur();
 		ElapsedTime runtime = new ElapsedTime();

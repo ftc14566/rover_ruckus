@@ -35,8 +35,6 @@ import android.text.style.BulletSpan;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -63,8 +61,7 @@ public class TeleOpBase extends OpMode
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor lifter = null;
-    private DcMotor CollAdjust = null;
-    private Servo lifter_lock = null;
+    private DcMotor CollAjust = null;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -77,13 +74,13 @@ public class TeleOpBase extends OpMode
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         lifter = hardwareMap.get(DcMotor.class,"lifter");
-        CollAdjust = hardwareMap.get(DcMotor.class, "collector");
-        lifter_lock = hardwareMap.get(Servo.class, "lifter_lock");
+        CollAjust = hardwareMap.get(DcMotor.class, "collector");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        lifter.setDirection(DcMotor.Direction.REVERSE);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Self Destruction Sequence Activated");
@@ -156,18 +153,18 @@ public class TeleOpBase extends OpMode
 
 
 
-        float CollAdjustRaw = gamepad2.right_stick_y;
-        float CollAdjustbackRaw = -gamepad2.right_stick_y;
+        float CollAjustraw = gamepad2.right_stick_y;
+        float CollAjustbackraw = -gamepad2.right_stick_y;
 
-        double CollAdjustData = Range.clip(CollAdjustRaw + 0, -1, 1);
-        double CollAdjustBackData = Range.clip(CollAdjustbackRaw + 0, -1, 1);
-        double CollMot = Range.clip(CollAdjustData - CollAdjustBackData, -.5, .5);
+        double CollAjustData = Range.clip(CollAjustraw + 0, -1, 1);
+        double CollAjustBackData = Range.clip(CollAjustbackraw + 0, -1, 1);
+        double CollMot = Range.clip(CollAjustData - CollAjustBackData, -.5, .5);
 
         if(CollMot == 0){
             CollMot = -.2;
         }
 
-        CollAdjust.setPower(CollMot);
+        CollAjust.setPower(CollMot);
 
 
 
@@ -177,48 +174,23 @@ public class TeleOpBase extends OpMode
     }
 
 
-    float LockPast = 0;
-    private void doLifter() {
+     private void doLifter() {
          //Lifter To-Do:
          //Get lifter design from builders
          //Write code that operates the lifter
          //Connect the lifter to a button on the controller
 
          float LifterYes = gamepad2.left_stick_y;
-         boolean LockYes = gamepad2.left_stick_button;
-         float LockPos = 0;
          float LifterOpp = 0;
          double LiftScale = .5;
-         float LockGo = 0;
 
-         if(LockPos == 1){
-             LockGo = 100;
-         }
-         if(LockPos == 0){
-             LockGo = 80;
-         }
-         if(LockPos == 1){
-             if(LockYes = true){
-                 LockGo = 80;
-                 LockPos = 0;
-             }
-         }
-         if(LockPos == 0){
-             if(LockYes = true){
-                 LockGo = 100;
-                 LockPos = 1;
-             }
-         }
+         double LifterActivate = Range.clip(LifterYes - LifterOpp, -1, 1) * LiftScale;
 
-         double LifterActivate = Range.clip(LifterYes * LiftScale - LifterOpp * LiftScale, -1, 1);
-
-         if(LockPast != LockGo){
-            lifter_lock.setPosition(LockGo);
-            LockPast = LockGo;
-         }
          lifter.setPower(LifterActivate);
 
      }
+
+
 
 
 
