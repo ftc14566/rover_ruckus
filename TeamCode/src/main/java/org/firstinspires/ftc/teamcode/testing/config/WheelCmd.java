@@ -11,6 +11,8 @@ public abstract class WheelCmd implements Cmd  {
 
 	private double _timeoutS;
 
+	public double getTimeoutS(){ return _timeoutS; }
+
 	protected WheelCmd(double timeoutS){
 		_timeoutS = timeoutS;
 	}
@@ -34,7 +36,6 @@ public abstract class WheelCmd implements Cmd  {
 			leftWheel.showTelemetry(opMode.telemetry);
 			rightWheel.showTelemetry(opMode.telemetry);
 			opMode.telemetry.addData("elapsed time", "%5.2f (s)", runtime.seconds() );
-
 			opMode.telemetry.update();
 		}
 

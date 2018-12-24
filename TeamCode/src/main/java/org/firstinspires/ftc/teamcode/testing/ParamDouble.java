@@ -41,6 +41,8 @@ public class ParamDouble implements Param {
 
 	public double getCur(){ return _cur * _scale; }
 
+	public void setCur(double value){ _cur = value / _scale; }
+
 	@Override
 	public void appendSummary(StringBuilder builder){
 		builder.append(String.format(getFormat(),_cur)); // don't user getCur() because we don't want the value scaled here

@@ -20,7 +20,7 @@ public class CollectorSettings extends Settings {
 	@Override
 	public void execute(ExecutionContext ctx) {
 
-		HardwareTractor bot = ctx.robot;
+		HardwareTractor2 bot = ctx.robot;
 
 		double timeoutS = this.timeoutS.getCur();
 		ElapsedTime runtime = new ElapsedTime();
@@ -36,6 +36,11 @@ public class CollectorSettings extends Settings {
 
 		bot.collector.setPower( 0.0 );
 
+	}
+
+	@Override
+	public Cmd buildCommand() {
+		return null;
 	}
 
 

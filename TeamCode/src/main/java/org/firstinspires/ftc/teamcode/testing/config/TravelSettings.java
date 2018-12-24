@@ -18,9 +18,14 @@ public class TravelSettings extends Settings {
 	}
 
 	@Override
-	public void execute(ExecutionContext ctx ){
-		TravelCmd cmd = new TravelCmd( inches.getCur(), power.getCur(), timeoutS.getCur() );
-		cmd.exec(ctx);
+	public Cmd buildCommand() {
+		return new TravelCmd( inches.getCur(), power.getCur(), timeoutS.getCur() );
+	}
+
+	public void init(TravelCmd cmd){
+		inches.setCur(cmd.getInches());
+		power.setCur(cmd.getPower());
+		timeoutS.setCur(cmd.getTimeoutS());
 	}
 
 }

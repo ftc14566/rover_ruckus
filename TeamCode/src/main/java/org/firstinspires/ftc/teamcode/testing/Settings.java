@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.testing;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.testing.config.Cmd;
 
 // base class for testing 1 function all on the AutoBot
 public abstract class Settings {
@@ -12,7 +13,11 @@ public abstract class Settings {
 		this.params = params;
 	}
 
-	abstract public void execute(ExecutionContext bot);
+	public void execute(ExecutionContext ctx){
+		buildCommand().exec(ctx);
+	}
+
+	abstract public Cmd buildCommand();
 
 	public void nextParam(){
 		++paramIndex;
@@ -41,7 +46,7 @@ public abstract class Settings {
 		telemetry.update();
 	}
 
-	void showSummary(Telemetry telemetry){
+	public void showSummary(Telemetry telemetry){
 		StringBuilder builder = new StringBuilder();
 		for(int i=0;i<params.length;++i){
 			builder.append(' ');
@@ -56,7 +61,7 @@ public abstract class Settings {
 		params[paramIndex].showDetails(telemetry);
 	}
 
-	private String _label;
+	protected String _label;
 	protected Param[] params;
 	private int paramIndex = 0;
 

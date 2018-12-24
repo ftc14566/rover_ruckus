@@ -22,6 +22,8 @@ public class HardwareTractor {
 		left_drive = hardwareMap.get(DcMotor.class, "left_drive");
 		right_drive = hardwareMap.get(DcMotor.class, "right_drive");
 
+		left_drive.setDirection(DcMotor.Direction.REVERSE);
+
 		lifter = hardwareMap.get(DcMotor.class, "lifter");
 		lifter.setDirection(DcMotor.Direction.REVERSE); // so positive power used to 'lift'
 
