@@ -29,7 +29,7 @@ public class HardwareTractor {
 
 		collector = hardwareMap.get(DcMotor.class, "collector");
 
-		marker_servo = hardwareMap.get(Servo.class, "token");
+		marker_servo = hardwareMap.get(Servo.class, "marker_servo");
 		lifter_lock = hardwareMap.get(Servo.class, "lifter_lock");
 
 		left_eye = hardwareMap.get(ColorSensor.class,"left_eye");

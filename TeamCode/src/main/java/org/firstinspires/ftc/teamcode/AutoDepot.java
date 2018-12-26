@@ -55,22 +55,60 @@ public class AutoDepot extends LinearOpMode {
 
     static final double     COUNTS_PER_MOTOR_REV    = 288 ;
     static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 6.75 ;     // For figuring circumference
+    static final double     WHEEL_DIAMETER_INCHES   = 6.75 ;// For figuring circumference
+    static final double WHEEL_SEPARATION = 15.25 ;
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 0.3;
     static final double     TURN_SPEED              = 0.3;
 
-    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
-    static final int    CYCLE_MS    =   50;     // period of each cycle
-    static final double MAX_POS     =  1.0;     // Maximum rotational position
-    static final double MIN_POS     =  0.0;     // Minimum rotational position
-    private Servo lifter_lock;
-    private Servo marker_servo;
-    double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
-    boolean rampUp = true;
+
+    public void Lock(){
+        telemetry.addData("locking", "");
+        telemetry.update();
+        robot.lifter_lock.setPosition(100);
+    }
+    public void Unlock(){
+        robot.lifter_lock.setPosition(.45);
+        telemetry.addData("unlocking",robot.lifter_lock.getPosition());
+        telemetry.update();
+
+    }
+    public void boostLifter(){
+        robot.lifter.setPower(.5);
+    }
+
+    public void LowerLifter() {
+        telemetry.addData("lowering", "");
+        telemetry.update();
+        ElapsedTime runtime = new ElapsedTime();
+        while (opModeIsActive() && (runtime.seconds() < 4.3)) {
+            telemetry.addData("lowering", runtime.seconds());
+            telemetry.update();
+            sleep(100);
+            robot.lifter.setPower(.01);
+        }
+    }
+    public void upLifter(){
+        robot.lifter.setPower(0);
+        robot.lifter.setPower(-.25);
+        sleep(100);
+        robot.lifter.setPower(0);
+        sleep(1000);
+    }
+
+    public void robotLifter(){
+        Unlock();
+        LowerLifter();
+        boostLifter();
+        upLifter();
+    }
 
     public void robotDrive(double driveSpeed, double leftInches, double rightInches) {
+
+        while(opModeIsActive() && gamepad1.a == false) {
+            sleep(100);
+        }
         robot.left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -88,82 +126,61 @@ public class AutoDepot extends LinearOpMode {
         robot.left_drive.setPower(Math.abs(driveSpeed));
         robot.right_drive.setPower(Math.abs(driveSpeed));
 
-        while(robot.left_drive.isBusy() || robot.right_drive.isBusy()){
-
+        while(opModeIsActive() && (robot.left_drive.isBusy() || robot.right_drive.isBusy())){
+            sleep(100);
         }
         robot.left_drive.setPower(0);
         robot.right_drive.setPower(0);
         sleep(0020);
         robot.left_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.right_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
     }
+
+    public void robotTurn(double DRIVE_SPEED,double rightDegrees ){
+        double inches = (rightDegrees * WHEEL_SEPARATION/2 * 3.1415926 / 180)/2;
+        robotDrive(DRIVE_SPEED, inches, -inches);
+    }
+    public void robotDriveSteps(){
+        robotDrive(DRIVE_SPEED,3,3);
+        robotTurn(DRIVE_SPEED,90);
+        robotDrive(DRIVE_SPEED, 15,15);
+        robotTurn(DRIVE_SPEED, -90);
+        robotDrive(DRIVE_SPEED, 15,15);
+        robotTurn(DRIVE_SPEED, 45);
+        robotDrive(DRIVE_SPEED, 15,15);
+        robotDrive(DRIVE_SPEED,-6,-6);
+        robotTurn(DRIVE_SPEED,90);
+        robotDrive(DRIVE_SPEED, 45,45);
+    }
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         robot = new HardwareTractor();
         robot.init(hardwareMap);
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
 
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
 
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-        String robotState = "dropping";
 
 
-        double locked = 1;
-        double unlocked = 0.75;
+
+
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            if (robotState == "dropping") {
-                //robot.lifter_lock.setPosition(unlocked);
-                //sleep(750);
-                //robot.lifter.setPower(.3);
-               // sleep(3000);
-                //robot.lifter.setPower(0);
-                robotState = "detach";
-            }
+                robotLifter();
+                robotDriveSteps();
 
-            if (robotState == "detach") {
-                robotDrive(DRIVE_SPEED,3,3);
-                robotDrive(DRIVE_SPEED,12,-12);
 
-                //robotState = "hitWall";
-            }
 
-            if (robotState == "hitWall") {
-                robotDrive(DRIVE_SPEED, 15,15);
-                robotDrive(DRIVE_SPEED, -12,12);
-                robotDrive(DRIVE_SPEED, 15,15);
-                robotDrive(DRIVE_SPEED, 12,-12);
-                robotDrive(DRIVE_SPEED, 20,20);
-                robotDrive(DRIVE_SPEED,6,-6);
-                robotDrive(DRIVE_SPEED, 18,18);
-                robotState = "driveDepot";
-
-            }
-
-            if (robotState == "driveDeot") {
-                robotDrive(DRIVE_SPEED, -6,-6);
-                robotDrive(DRIVE_SPEED, 12,-12);
-                robotDrive(DRIVE_SPEED, 25,25);
-                //robotDrive(DRIVE_SPEED, 36,36);
-
-                robotState = "driveCrater";
-            }
-
-            if (robotState == "driveCrater") {
                 robotDrive(DRIVE_SPEED, -90,-90);
-                robotState = "complete";
-            }
-
 
         }
     }
