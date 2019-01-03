@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.testing.config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.HardwareTractor;
 import org.firstinspires.ftc.teamcode.testing.*;
 
 public class CollectorSettings extends Settings {

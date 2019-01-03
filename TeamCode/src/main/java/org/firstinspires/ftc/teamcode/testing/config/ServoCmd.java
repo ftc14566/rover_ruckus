@@ -6,11 +6,8 @@ import org.firstinspires.ftc.teamcode.testing.ExecutionContext;
 
 public class ServoCmd implements Cmd {
 
-	public String getSelect(){ return select;}
-	public double getPosition(){ return position; }
-
-	private String select;
-	private double position;
+	String select;
+	double position;
 
 	public ServoCmd(String select,double position){
 		this.select = select;

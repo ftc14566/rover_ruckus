@@ -17,13 +17,6 @@ public class ParamSelect implements Param {
 
 	public String getCur(){ return _options[_index]; }
 
-	public void setCur(String value){
-		for(int i=0;i<_options.length;++i)
-			if (_options[i] == value)
-				_index = i;
-
-	}
-
 	@Override
 	public void inc() {
 		if( ++_index == _options.length ) _index = 0;

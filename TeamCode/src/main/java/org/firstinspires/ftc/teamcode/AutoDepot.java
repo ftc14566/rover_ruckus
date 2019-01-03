@@ -38,10 +38,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.testing.Wheel;
 
 
-// This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
+ // This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
  // the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  // of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  // class is instantiated on the Robot Controller and executed.
@@ -72,27 +71,14 @@ public class AutoDepot extends LinearOpMode {
     boolean rampUp = true;
 
     public void robotDrive(double driveSpeed, double leftInches, double rightInches) {
-
-        int  leftCounts = (int) (leftInches * COUNTS_PER_INCH);
-        int rightCounts = (int)(rightInches * COUNTS_PER_INCH);
-
-        driveCounts(driveSpeed, leftCounts, rightCounts);
-    }
-
-    public void robotTurn2(double turnSpeed, double degreesRight) {
-
-        int countsForFullRotation = 682;
-        int counts = (int)(degreesRight * countsForFullRotation / 360 ) ;
-
-        driveCounts(turnSpeed, counts, -counts);
-    }
-
-    private void driveCounts(double driveSpeed, int deltaLeftCounts, int deltaRightCounts) {
         robot.left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        int newLeftTarget = robot.left_drive.getCurrentPosition() + deltaLeftCounts;
-        int newRightTarget = robot.right_drive.getCurrentPosition() + deltaRightCounts;
+        //leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        int newLeftTarget = robot.left_drive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+        int newRightTarget = robot.right_drive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
         robot.left_drive.setTargetPosition(newLeftTarget);
         robot.right_drive.setTargetPosition(newRightTarget);
 
@@ -102,25 +88,15 @@ public class AutoDepot extends LinearOpMode {
         robot.left_drive.setPower(Math.abs(driveSpeed));
         robot.right_drive.setPower(Math.abs(driveSpeed));
 
-        while(robot.left_drive.isBusy() || robot.right_drive.isBusy()){}
+        while(robot.left_drive.isBusy() || robot.right_drive.isBusy()){
+
+        }
         robot.left_drive.setPower(0);
         robot.right_drive.setPower(0);
-        sleep(20);
+        sleep(0020);
         robot.left_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.right_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        while( opModeIsActive() && !gamepad1.a){
-            sleep(100);
-        }
     }
-
-
-    void robotTurn( double degrees ){
-        double WheelSeparation = 15.0;
-        double inches = degrees * WheelSeparation/2 * 3.1415926 / 180;
-        robotDrive( 0.5, inches, -inches );
-    }
-
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");

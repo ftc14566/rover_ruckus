@@ -12,7 +12,7 @@ import java.io.*;
 @TeleOp(name="Metrics Tester", group="Tractorbot")
 public class MetricsMode extends LinearOpMode {
 
-	HardwareTractor2 robot = new HardwareTractor2();
+	HardwareTractor2 robot   = new HardwareTractor2();
 
 	@Override
 	public void runOpMode() {
@@ -20,15 +20,10 @@ public class MetricsMode extends LinearOpMode {
 		telemetry.addData("Status", "Initializing Autobot"); telemetry.update();
 		robot.init(hardwareMap);
 
-		robot.marker_servo.scaleRange(0,180);
-
 		EyeColorSettings.register(hardwareMap);
-
-		SettingsSelector controller = new SettingsSelector(new ExecutionContext(this,robot));
 
 		// create the controller
 		SettingsSelector menu = new SettingsSelector( new ExecutionContext(this,robot) );
-
 		// wire it up to game pad 1
 		PressController pad = new PressController( gamepad1 );
 		pad.Listener = menu;

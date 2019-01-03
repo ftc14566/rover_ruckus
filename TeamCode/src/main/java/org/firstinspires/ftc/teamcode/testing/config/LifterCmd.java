@@ -7,10 +7,6 @@ import org.firstinspires.ftc.teamcode.testing.HardwareTractor2;
 
 public class LifterCmd  implements Cmd {
 
-	public double getPower(){ return power; }
-	public double getTimeout(){ return timeoutS;}
-	public String getLabe(){ return label; }
-
 	double power;
 	String label;
 	double timeoutS;

@@ -61,7 +61,7 @@ public abstract class Settings {
 		params[paramIndex].showDetails(telemetry);
 	}
 
-	protected String _label;
+	private String _label;
 	protected Param[] params;
 	private int paramIndex = 0;
 

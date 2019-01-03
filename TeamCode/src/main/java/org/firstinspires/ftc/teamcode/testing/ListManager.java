@@ -24,27 +24,27 @@ public class ListManager  extends NullButtonPressListener implements ButtonPress
 		double wheelSeparation = 15.5;
 
 		_list = new ArrayList<Cmd>();
-
-		// initialize servos
-		_list.add( new ServoCmd("marker_servo", 1.0));
-		_list.add( new ServoCmd("lifter_latch", 0.6));
-
-
 		_list.add( new LifterCmd(0.01, "Lifter engage", 0.1)); // engage lifter
-		_list.add( new ServoCmd("lifter_latch", 0.48));				// unlock
+		_list.add( new ServoCmd("lifter_latch", 0.5));				// unlock
 		_list.add( new LifterCmd(0.01, "Lifter engage", 3.0)); // wait
-		_list.add( new LifterCmd(-0.2, "Lifter extend", 1.0)); // extend off of hook
+		_list.add( new LifterCmd(-0.1, "Lifter extend", 1.0)); // extend off of hook
 
 		_list.add( new TravelCmd( 3, 0.3, 5 )); // move off of hook
 
 		_list.add( new LifterCmd(0.2, "Lifter retract", 1.5)); // retract arm
 		_list.add( new LifterCmd(0, "lifter off", 0.5)); // shut off lifter motor
 
-		_list.add( new TurnCmd( 76, 0.3, wheelSeparation, 5 ));
-		_list.add( new TravelCmd( 56, 0.3, 5 ));
-		_list.add( new TurnCmd( 125, 0.3, wheelSeparation, 5 ));
-		_list.add( new TravelCmd( 120, 0.4, 5 ));
-		_list.add( new TravelCmd( 120, 0.5, 5 ));
+		_list.add( new TurnCmd( 90, 0.3, wheelSeparation, 5 ));
+		_list.add( new TravelCmd( 24, 0.3, 5 ));
+		_list.add( new TurnCmd( 90, 0.3, wheelSeparation, 5 ));
+		_list.add( new TravelCmd( -12, 0.3, 5 ));
+		_list.add( new TurnCmd( -90, 0.3, wheelSeparation, 5 ));
+
+		// drive
+		// turn
+		// move survo
+		// power lifter
+		//
 
 	}
 
@@ -64,14 +64,6 @@ public class ListManager  extends NullButtonPressListener implements ButtonPress
 			} else if( cmd instanceof TurnCmd ){
 				TurnSettings settings = new TurnSettings();
 				settings.init((TurnCmd)cmd);
-				_settings = settings;
-			} else if( cmd instanceof ServoCmd ){
-				ServoSettings settings = new ServoSettings();
-				settings.init((ServoCmd)cmd);
-				_settings = settings;
-			}  else if( cmd instanceof LifterCmd ){
-				LifterSettings settings = new LifterSettings();
-				settings.init((LifterCmd)cmd);
 				_settings = settings;
 			}
 		}
