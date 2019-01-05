@@ -61,88 +61,12 @@ public class AutoDepot extends LinearOpMode {
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 0.45;
     static final double     TURN_SPEED              = 0.3;
-    public int allianceSel;
-    public int pathSel;
-
-    public int allianceSelection(int alliance) {
-        while (!opModeIsActive()) {
-            if (alliance == 1) {
-                telemetry.addData("Select an alliance\n>>>Red\nBlue", "");
-                telemetry.update();
-            } else if (alliance == 2) {
-                telemetry.addData("Select an alliance\nRed\n>>>Blue", "");
-                telemetry.update();
-            }
-
-            while ((!gamepad1.dpad_down && !gamepad1.dpad_up) && !gamepad1.a) {
-                sleep(10);
-            }
-            if (gamepad1.a) {
-                //Break out of loop
-                break;
-            } else if (gamepad1.dpad_down) {
-                alliance = 2;
-            } else if (gamepad1.dpad_up) {
-                alliance = 1;
-            }
-        }
-        return alliance;
-    }
-
-    public int pathSelection(int path) {
-        while (!opModeIsActive()) {
-            if (path == 1) {
-                telemetry.addData("Select a path\n>>>Path A\nPath B\nPath C\nPath D", "");
-                telemetry.update();
-            } else if (path == 2) {
-                telemetry.addData("Select a path\nPath A\n>>>Path B\nPath C\nPath D", "");
-                telemetry.update();
-            } else if (path == 3) {
-                telemetry.addData("Select a path\nPath A\nPath B\n>>>Path C\nPath D", "");
-                telemetry.update();
-            } else if (path == 4) {
-                telemetry.addData("Select a path\nPath A\nPath B\nPath C\n>>>Path D", "");
-                telemetry.update();
-            }
-            while ((!gamepad1.dpad_down && !gamepad1.dpad_up) && !gamepad1.a) {
-                sleep(100);
-            }
-            if(gamepad1.a){
-                break;
-            } else if(gamepad1.dpad_down && path <4){
-                path = path + 1;
-            } else if(gamepad1.dpad_up && path > 1){
-                path = path - 1;
-            }
-            sleep(250);
-        }
-        return path;
-    }
-
-    public void preTelemetry(int allianceSel, int pathSel){
-        if(allianceSel == 1){
-            telemetry.addData("Your alliance is","Red");
-        } else if(allianceSel == 2){
-            telemetry.addData("Your alliance is","Blue");
-        }
-
-        if(pathSel == 1){
-            telemetry.addData("Your path is","A");
-        } else if(pathSel == 2){
-            telemetry.addData("Your path is","B");
-        } else if(pathSel == 3){
-            telemetry.addData("Your path is","C");
-        } else if(pathSel == 4){
-            telemetry.addData("Your path is","D");
-        }
-
-        telemetry.update();
-    }
+    int pathSel = 1;
 
     public void markerDrop(){
         robot.marker_servo.setPosition(0);
         sleep(1200);
-        robotDrive(.7, -90,-90);
+        robotDrive(.7, -78,-78);
     }
 
     public void Lock(){
@@ -150,17 +74,17 @@ public class AutoDepot extends LinearOpMode {
         telemetry.update();
         robot.lifter_lock.setPosition(.43);
     }
-    public void Unlock(){
-        robot.lifter_lock.setPosition(.55);
+    public void unlock(){
+        robot.lifter_lock.setPosition(.575);
         telemetry.addData("unlocking",robot.lifter_lock.getPosition());
         telemetry.update();
 
     }
-    public void boostLifter(){
-        robot.lifter.setPower(.5);
-    }
 
-    public void LowerLifter() {
+
+    public void LowerRobot() {
+        robot.lifter.setPower(.01);
+        unlock();
         telemetry.addData("lowering", "");
         telemetry.update();
         ElapsedTime runtime = new ElapsedTime();
@@ -168,21 +92,16 @@ public class AutoDepot extends LinearOpMode {
             telemetry.addData("lowering", runtime.seconds());
             telemetry.update();
             sleep(100);
-            robot.lifter.setPower(.01);
         }
     }
     public void upLifter(){
-        robot.lifter.setPower(0);
         robot.lifter.setPower(-.25);
         sleep(170);
         robot.lifter.setPower(0);
-        sleep(1000);
-    }
+        }
 
     public void robotLifter(){
-        Unlock();
-        LowerLifter();
-        boostLifter();
+        LowerRobot();
         upLifter();
     }
 
@@ -225,16 +144,16 @@ public class AutoDepot extends LinearOpMode {
     }
     public void robotSteps(int pathSel){
         if(pathSel == 1){
-            robotDrive(DRIVE_SPEED,3,3);
-            robotTurn(TURN_SPEED,90);
-            robotDrive(DRIVE_SPEED, 30,30);
-            robotTurn(TURN_SPEED, -45);
+            robotDrive(.2,2,2);
+            robotTurn(.3,45);
+            //robotDrive(DRIVE_SPEED, 30,30);
+            //robotTurn(TURN_SPEED, -45);
             //robotDrive(DRIVE_SPEED, 15,15);
             //robotTurn(DRIVE_SPEED, 45);
-            robotDrive(DRIVE_SPEED, 28,28);
-            robotDrive(DRIVE_SPEED,-3,-3);
+            robotDrive(DRIVE_SPEED, 45,45);
+            //robotDrive(DRIVE_SPEED,-3,-3);
             robotTurn(TURN_SPEED,90);
-            robotDrive(DRIVE_SPEED, 17,17);
+            robotDrive(DRIVE_SPEED, 30,30);
             markerDrop();
         }
         if (pathSel == 2){
@@ -271,10 +190,8 @@ public class AutoDepot extends LinearOpMode {
         robot = new HardwareTractor();
         robot.init(hardwareMap);
         robot.marker_servo.setPosition(1);
-        allianceSel = allianceSelection(1);
-        sleep(2000);
-        pathSel = pathSelection(1);
-        preTelemetry(allianceSel,pathSel);
+
+
 
 
 
@@ -282,13 +199,7 @@ public class AutoDepot extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-                robotLifter();
-                robotSteps(pathSel);
-                while(opModeIsActive() && !gamepad1.a){
-                     sleep(100);
-                }
-        }
+        robotLifter();
+        robotSteps(pathSel);
     }
 }
