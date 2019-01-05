@@ -50,7 +50,7 @@ import com.qualcomm.robotcore.util.Range;
 //Disabled
 public class AutoDepot extends LinearOpMode {
 
-    private HardwareTractor robot;
+    protected HardwareTractor robot;
     private ElapsedTime runtime = new ElapsedTime();
 
     static final double     COUNTS_PER_MOTOR_REV    = 288 ;
@@ -66,7 +66,7 @@ public class AutoDepot extends LinearOpMode {
     public void markerDrop(){
         robot.marker_servo.setPosition(0);
         sleep(1200);
-        robotDrive(.7, -78,-78);
+        robotDrive(.9, -85,-85);
     }
 
     public void Lock(){
@@ -142,45 +142,45 @@ public class AutoDepot extends LinearOpMode {
         double inches = (rightDegrees * WHEEL_SEPARATION/2 * 3.1415926 / 180)/2;
         robotDrive(DRIVE_SPEED, inches*2, -inches*2);
     }
-    public void robotSteps(int pathSel){
-        if(pathSel == 1){
-            robotDrive(.2,2,2);
-            robotTurn(.3,45);
-            //robotDrive(DRIVE_SPEED, 30,30);
-            //robotTurn(TURN_SPEED, -45);
-            //robotDrive(DRIVE_SPEED, 15,15);
-            //robotTurn(DRIVE_SPEED, 45);
-            robotDrive(DRIVE_SPEED, 45,45);
-            //robotDrive(DRIVE_SPEED,-3,-3);
-            robotTurn(TURN_SPEED,90);
-            robotDrive(DRIVE_SPEED, 30,30);
-            markerDrop();
-        }
-        if (pathSel == 2){
-            robotDrive(DRIVE_SPEED,3,3);
-            robotTurn(TURN_SPEED,90);
-            robotDrive(DRIVE_SPEED,45,45);
-            robot.marker_servo.setPosition(0);
-            sleep(2000);
-            //robotDrive(DRIVE_SPEED,-22,-22);
-        }
-        if (pathSel == 3){
-            robotDrive(DRIVE_SPEED,3,3);
-            robotTurn(TURN_SPEED,90);
-            robotDrive(DRIVE_SPEED,45,45);
-            robot.marker_servo.setPosition(0);
-            sleep(2000);
-            robotDrive(DRIVE_SPEED,-22,-22);
-        }
-        if (pathSel == 4){
-            robotDrive(DRIVE_SPEED,3,3);
-            robotTurn(TURN_SPEED,90);
-            sleep(5000);
-            robotDrive(DRIVE_SPEED,45,45);
-            robot.marker_servo.setPosition(0);
-            sleep(2000);
-            robotDrive(DRIVE_SPEED,-22,-22);
-        }
+    public void robotSteps(){
+
+      pathOne();
+
+    }
+
+    private void pathFour() {
+        robotDrive(DRIVE_SPEED,3,3);
+        robotTurn(TURN_SPEED,90);
+        sleep(5000);
+        robotDrive(DRIVE_SPEED,45,45);
+        robot.marker_servo.setPosition(0);
+        sleep(2000);
+        robotDrive(DRIVE_SPEED,-22,-22);
+    }
+
+    private void pathThree() {
+        robotDrive(DRIVE_SPEED,3,3);
+        robotTurn(TURN_SPEED,90);
+        robotDrive(DRIVE_SPEED,45,45);
+        robot.marker_servo.setPosition(0);
+        sleep(2000);
+        robotDrive(DRIVE_SPEED,-22,-22);
+    }
+
+
+
+    private void pathOne() {
+        robotDrive(.2,2,2);
+        robotTurn(.3,45);
+        //robotDrive(DRIVE_SPEED, 30,30);
+        //robotTurn(TURN_SPEED, -45);
+        //robotDrive(DRIVE_SPEED, 15,15);
+        //robotTurn(DRIVE_SPEED, 45);
+        robotDrive(DRIVE_SPEED, 45,45);
+        //robotDrive(DRIVE_SPEED,-3,-3);
+        robotTurn(TURN_SPEED,90);
+        robotDrive(DRIVE_SPEED, 30,30);
+        markerDrop();
     }
 
     @Override
@@ -200,6 +200,6 @@ public class AutoDepot extends LinearOpMode {
         runtime.reset();
 
         robotLifter();
-        robotSteps(pathSel);
+        robotSteps();
     }
 }
