@@ -31,11 +31,11 @@ public class AutoLifter extends LinearOpMode {
     public void Lock(){
         telemetry.addData("locking", "");
         telemetry.update();
-        robot.lifter_lock.setPosition(100);
+        robot.lifter_lock.setPosition(.43);
     }
 
     public void Unlock(){
-        robot.lifter_lock.setPosition(.45);
+        robot.lifter_lock.setPosition(.55);
         telemetry.addData("unlocking",robot.lifter_lock.getPosition());
         telemetry.update();
 
@@ -49,11 +49,11 @@ public class AutoLifter extends LinearOpMode {
         telemetry.addData("lowering","");
         telemetry.update();
         ElapsedTime runtime = new ElapsedTime();
-        while (opModeIsActive() && (runtime.seconds() < 4.3)){
+        while (opModeIsActive() && (runtime.seconds() < 4.4)){
             telemetry.addData("lowering",runtime.seconds());
             telemetry.update();
             sleep(100);
-            robot.lifter.setPower(.01);
+            robot.lifter.setPower(.02);
         }
         robot.lifter.setPower(0);
 

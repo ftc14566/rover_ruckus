@@ -158,10 +158,10 @@ public class TeleOpBase extends OpMode
 
          if (lock == true) {
              lifter.setPower(.3);
-             lifter_lock.setPosition(.8);
+             lifter_lock.setPosition(.43);
          }
          if (unlock == true) {
-             lifter_lock.setPosition(.48);
+             lifter_lock.setPosition(.55);
          }
      }
 
