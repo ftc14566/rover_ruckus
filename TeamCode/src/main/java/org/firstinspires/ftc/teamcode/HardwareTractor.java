@@ -32,8 +32,8 @@ public class HardwareTractor {
 		marker_servo = hardwareMap.get(Servo.class, "token");
 		lifter_lock = hardwareMap.get(Servo.class, "lifter_lock");
 
-		left_eye = hardwareMap.get(ColorSensor.class,"left_eye");
-		right_eye = hardwareMap.get(ColorSensor.class, "right_eye");
+		//left_eye = hardwareMap.get(ColorSensor.class,"left_eye");
+		//right_eye = hardwareMap.get(ColorSensor.class, "right_eye");
 
 	}
 
