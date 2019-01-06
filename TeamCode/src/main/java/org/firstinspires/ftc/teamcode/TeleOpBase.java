@@ -35,6 +35,7 @@ import android.text.style.BulletSpan;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -58,28 +59,34 @@ public class TeleOpBase extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
+    private DcMotor left_drive = null;
+    private DcMotor right_drive = null;
     private DcMotor lifter = null;
     private DcMotor CollAjust = null;
+    private Servo lifter_lock = null;
+    private Servo marker_servo = null;
 
     /*
      * Code to run ONCE when the driver hits INIT
      */
+
     @Override
     public void init() {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        left_drive  = hardwareMap.get(DcMotor.class, "left_drive");
+        right_drive = hardwareMap.get(DcMotor.class, "right_drive");
         lifter = hardwareMap.get(DcMotor.class,"lifter");
         CollAjust = hardwareMap.get(DcMotor.class, "collector");
+        lifter_lock = hardwareMap.get(Servo.class, "lifter_lock");
+        marker_servo = hardwareMap.get(Servo.class, "marker_servo");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        left_drive.setDirection(DcMotor.Direction.FORWARD);
+        right_drive.setDirection(DcMotor.Direction.REVERSE);
+        lifter.setDirection(DcMotor.Direction.REVERSE);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Self Destruction Sequence Activated");
@@ -110,48 +117,11 @@ public class TeleOpBase extends OpMode
         move();
         doLifter();
         doCollector();
-
-
-    /*
-        // Setup a variable for each drive wheel to save power level for telemetry
-        double leftPower;
-        double rightPower;
-
-        // Choose to drive using either Tank Mode, or POV Mode
-        // Comment out the method that's not used.  The default below is POV.
-
-        // POV Mode uses left stick to go forward, and right stick to turn.
-        // - This uses basic math to combine motions and is easier to drive straight.
-        double drive = -gamepad1.left_stick_y;
-        double turn  =  gamepad1.right_stick_x;
-        leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-        rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
-
-        // Tank Mode uses one stick to control each wheel.
-        // - This requires no math, but it is hard to drive forward slowly and keep straight.
-        // leftPower  = -gamepad1.left_stick_y ;
-        // rightPower = -gamepad1.right_stick_y ;
-
-        // Send calculated power to wheels
-        leftDrive.setPower(leftPower);
-        rightDrive.setPower(rightPower);
-
-        // Show the elapsed game time and wheel power.
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-  */
+        lock_lifter();
+        dropMarker();
     }
 
-
     private void doCollector() {
-        /* Collector To-Do:
-        Get collector design from builders
-        Write the code that operates the collector
-        Connect the collector to a button on controller
-        */
-
-
-
         float CollAjustraw = gamepad2.right_stick_y;
         float CollAjustbackraw = -gamepad2.right_stick_y;
 
@@ -164,14 +134,7 @@ public class TeleOpBase extends OpMode
         }
 
         CollAjust.setPower(CollMot);
-
-
-
-
-
-
     }
-
 
      private void doLifter() {
          //Lifter To-Do:
@@ -183,17 +146,36 @@ public class TeleOpBase extends OpMode
          float LifterOpp = 0;
          double LiftScale = .5;
 
-         double LifterActivate = Range.clip(LifterYes - LifterOpp, -1, 1) * LiftScale;
+         double LifterActivate = Range.clip(LifterYes * LiftScale - LifterOpp * LiftScale, -1, 1);
 
          lifter.setPower(LifterActivate);
 
      }
 
+     private void lock_lifter() {
+         boolean lock = gamepad2.dpad_right;
+         boolean unlock = gamepad2.dpad_left;
 
+         if (lock == true) {
+             lifter.setPower(.3);
+             lifter_lock.setPosition(.8);
+         }
+         if (unlock == true) {
+             lifter_lock.setPosition(.48);
+         }
+     }
 
+     private void dropMarker(){
+        boolean markerUp = gamepad2.dpad_up;
+        boolean markerDown = gamepad2.dpad_down;
 
-
-
+        if(markerUp == true){
+            marker_servo.setPosition(100);
+        }
+        if(markerDown == true){
+            marker_servo.setPosition(0);
+        }
+     }
 
     private void move() {
         double scale = .5; //Sets scale to .5
@@ -210,8 +192,8 @@ public class TeleOpBase extends OpMode
         double RightMotPower = Range.clip(Drive - Turn, -1, 1) * scale; //Keeps motor power inside -1 and 1
 
 
-        leftDrive.setPower(LeftMotPower); //Renames variables to work with RC phone's config
-        rightDrive.setPower(RightMotPower); //Renames variables to work with RC phone's config
+        left_drive.setPower(LeftMotPower); //Renames variables to work with RC phone's config
+        right_drive.setPower(RightMotPower); //Renames variables to work with RC phone's config
     }
     /*
      * Code to run ONCE after the driver hits STOP
