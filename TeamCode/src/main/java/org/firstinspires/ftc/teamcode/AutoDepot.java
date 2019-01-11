@@ -64,7 +64,7 @@ public class AutoDepot extends LinearOpMode {
     int pathSel = 1;
 
     public void markerDrop(){
-        robot.marker_servo.setPosition(0);
+        robot.marker_servo.setPosition(100);
         sleep(1200);
         robotDrive(.9, -85,-85);
     }
@@ -189,7 +189,7 @@ public class AutoDepot extends LinearOpMode {
         telemetry.update();
         robot = new HardwareTractor();
         robot.init(hardwareMap);
-        robot.marker_servo.setPosition(1);
+        robot.marker_servo.setPosition(0);
 
 
 
