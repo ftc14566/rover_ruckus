@@ -169,10 +169,10 @@ public class TeleOpBase extends OpMode
         boolean markerUp = gamepad2.dpad_up;
         boolean markerDown = gamepad2.dpad_down;
 
-        if(markerUp == true){
+        if(markerDown == true) {
             marker_servo.setPosition(100);
         }
-        if(markerDown == true){
+        if(markerUp == true){
             marker_servo.setPosition(0);
         }
      }
@@ -191,7 +191,6 @@ public class TeleOpBase extends OpMode
         double LeftMotPower = Range.clip(Drive + Turn, -1, 1) * scale; //Keeps the motor power inside -1 and 1
         double RightMotPower = Range.clip(Drive - Turn, -1, 1) * scale; //Keeps motor power inside -1 and 1
 
-
         left_drive.setPower(LeftMotPower); //Renames variables to work with RC phone's config
         right_drive.setPower(RightMotPower); //Renames variables to work with RC phone's config
     }
@@ -200,6 +199,7 @@ public class TeleOpBase extends OpMode
      */
     @Override
     public void stop() {
+
     }
 
 }
