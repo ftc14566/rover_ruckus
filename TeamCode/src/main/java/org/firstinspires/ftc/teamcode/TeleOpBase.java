@@ -144,7 +144,7 @@ public class TeleOpBase extends OpMode
 
          float LifterYes = gamepad2.left_stick_y;
          float LifterOpp = 0;
-         double LiftScale = .5;
+         double LiftScale = .8;
 
          double LifterActivate = Range.clip(LifterYes * LiftScale - LifterOpp * LiftScale, -1, 1);
 
@@ -158,10 +158,10 @@ public class TeleOpBase extends OpMode
 
          if (lock == true) {
              lifter.setPower(.3);
-             lifter_lock.setPosition(.8);
+             lifter_lock.setPosition(.43);
          }
          if (unlock == true) {
-             lifter_lock.setPosition(.48);
+             lifter_lock.setPosition(.56);
          }
      }
 

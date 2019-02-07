@@ -38,9 +38,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
- // This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
+// This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
  // the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  // of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  // class is instantiated on the Robot Controller and executed.
@@ -61,12 +62,44 @@ public class AutoDepot extends LinearOpMode {
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 0.45;
     static final double     TURN_SPEED              = 0.3;
+    static final double     TIME_PER_INCH           = 0.5;
     int pathSel = 1;
+    public double leftAbort;
+    public double rightAbort;
+    public double abortTime;
+
+
+    public void markerDropArm(double robotPath){
+        robot.collector.setPower(-1);
+        sleep(50);
+        robot.collector.setPower(-.2);
+        sleep(100);
+        robot.collector.setPower(.5);
+        sleep(2000);
+        robot.collector.setPower(-.5);
+        sleep(300);
+        robot.collector.setPower(-.2);
+        if(robotPath == 1){
+            //robotTurn(.5, 15);
+            robotDrive(.3,3,-3,0);
+            robotDrive(.7, -60,-60,0);
+           // robotTurn(.3, -5);
+            //robotDrive(.7, -20,-20,0);
+        }
+        if(robotPath == 2) {
+            robotDrive(.3,-1.5,1.5,0);
+            //robotTurn(.5, -12);
+            robotDrive(.7, -60, -60, 0);
+            //robotTurn(.3, 5);
+            //robotDrive(.7, -20, -20, 0);
+        }
+    }
 
     public void markerDrop(){
-        robot.marker_servo.setPosition(0);
+        robot.marker_servo.setPosition(4.5);
         sleep(1200);
-        robotDrive(.9, -85,-85);
+        robot.marker_servo.setPosition(.5);
+        robotDrive(.75, -73,-73,0);
     }
 
     public void Lock(){
@@ -75,7 +108,7 @@ public class AutoDepot extends LinearOpMode {
         robot.lifter_lock.setPosition(.43);
     }
     public void unlock(){
-        robot.lifter_lock.setPosition(.575);
+        robot.lifter_lock.setPosition(.56);
         telemetry.addData("unlocking",robot.lifter_lock.getPosition());
         telemetry.update();
 
@@ -103,13 +136,19 @@ public class AutoDepot extends LinearOpMode {
     public void robotLifter(){
         LowerRobot();
         upLifter();
+        //Lock();
     }
 
-    public void robotDrive(double driveSpeed, double leftInches, double rightInches) {
+    public void robotDrive(double driveSpeed, double leftInches, double rightInches, double timeout) {
 
-        //while(opModeIsActive() && gamepad1.a == false){
-       //     sleep(100);
-      //  }
+        //if(timeout == 0){
+         //   leftAbort = (leftInches/driveSpeed)*TIME_PER_INCH;
+          //  rightAbort = (rightInches/driveSpeed)*TIME_PER_INCH;
+       // } else {
+        //    leftAbort = timeout;
+        //    rightAbort = timeout;
+        //}
+
         robot.left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -127,7 +166,8 @@ public class AutoDepot extends LinearOpMode {
         robot.left_drive.setPower(Math.abs(driveSpeed));
         robot.right_drive.setPower(Math.abs(driveSpeed));
 
-        while(opModeIsActive() && (robot.left_drive.isBusy() || robot.right_drive.isBusy())){
+        abortTime = getRuntime();
+        while(opModeIsActive() && (robot.left_drive.isBusy() || robot.right_drive.isBusy())) {
             sleep(100);
         }
 
@@ -140,7 +180,7 @@ public class AutoDepot extends LinearOpMode {
 
     public void robotTurn(double DRIVE_SPEED,double rightDegrees ){
         double inches = (rightDegrees * WHEEL_SEPARATION/2 * 3.1415926 / 180)/2;
-        robotDrive(DRIVE_SPEED, inches*2, -inches*2);
+        robotDrive(DRIVE_SPEED, inches*2, -inches*2,0);
     }
     public void robotSteps(){
 
@@ -149,38 +189,39 @@ public class AutoDepot extends LinearOpMode {
     }
 
     private void pathFour() {
-        robotDrive(DRIVE_SPEED,3,3);
+        robotDrive(DRIVE_SPEED,3,3,0);
         robotTurn(TURN_SPEED,90);
         sleep(5000);
-        robotDrive(DRIVE_SPEED,45,45);
+        robotDrive(DRIVE_SPEED,45,45,0);
         robot.marker_servo.setPosition(0);
         sleep(2000);
-        robotDrive(DRIVE_SPEED,-22,-22);
+        robotDrive(DRIVE_SPEED,-22,-22,0);
     }
 
     private void pathThree() {
-        robotDrive(DRIVE_SPEED,3,3);
+        robotDrive(DRIVE_SPEED,3,3,0);
         robotTurn(TURN_SPEED,90);
-        robotDrive(DRIVE_SPEED,45,45);
+        robotDrive(DRIVE_SPEED,45,45,0);
         robot.marker_servo.setPosition(0);
         sleep(2000);
-        robotDrive(DRIVE_SPEED,-22,-22);
+        robotDrive(DRIVE_SPEED,-22,-22,0);
     }
 
 
 
     private void pathOne() {
-        robotDrive(.2,2,2);
+        robotDrive(.2,2,2,0);
         robotTurn(.3,45);
         //robotDrive(DRIVE_SPEED, 30,30);
         //robotTurn(TURN_SPEED, -45);
         //robotDrive(DRIVE_SPEED, 15,15);
         //robotTurn(DRIVE_SPEED, 45);
-        robotDrive(DRIVE_SPEED, 45,45);
-        //robotDrive(DRIVE_SPEED,-3,-3);
-        robotTurn(TURN_SPEED,90);
-        robotDrive(DRIVE_SPEED, 30,30);
-        markerDrop();
+        robotDrive(DRIVE_SPEED, 38,38,0);
+       //robotDrive(DRIVE_SPEED,-5,-5,0);
+        robotTurn(TURN_SPEED,80);
+        robotDrive(DRIVE_SPEED, 15,15,0);
+        //robotTurn(.3, -40);
+        markerDropArm(1);
     }
 
     @Override
@@ -189,7 +230,7 @@ public class AutoDepot extends LinearOpMode {
         telemetry.update();
         robot = new HardwareTractor();
         robot.init(hardwareMap);
-        robot.marker_servo.setPosition(1);
+        robot.marker_servo.setPosition(.5);
 
 
 
@@ -201,5 +242,10 @@ public class AutoDepot extends LinearOpMode {
 
         robotLifter();
         robotSteps();
+        while(opModeIsActive()){
+            robot.left_drive.setPower(-.4);
+            robot.left_drive.setPower(-.4);
+            sleep(100);
+        }
     }
 }
