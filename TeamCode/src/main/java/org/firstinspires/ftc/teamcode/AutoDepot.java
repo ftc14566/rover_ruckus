@@ -30,15 +30,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
 // This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -69,30 +63,17 @@ public class AutoDepot extends LinearOpMode {
     public double abortTime;
 
 
-    public void markerDropArm(double robotPath){
+    public void markerDropArm(){
         robot.collector.setPower(-1);
         sleep(50);
         robot.collector.setPower(-.2);
         sleep(100);
         robot.collector.setPower(.5);
-        sleep(2000);
+        sleep(500);
+        //Does it work?
         robot.collector.setPower(-.5);
         sleep(300);
         robot.collector.setPower(-.2);
-        if(robotPath == 1){
-            //robotTurn(.5, 15);
-            robotDrive(.3,3,-3,0);
-            robotDrive(.7, -60,-60,0);
-           // robotTurn(.3, -5);
-            //robotDrive(.7, -20,-20,0);
-        }
-        if(robotPath == 2) {
-            robotDrive(.3,-1.5,1.5,0);
-            //robotTurn(.5, -12);
-            robotDrive(.7, -60, -60, 0);
-            //robotTurn(.3, 5);
-            //robotDrive(.7, -20, -20, 0);
-        }
     }
 
     public void markerDrop(){
@@ -136,7 +117,6 @@ public class AutoDepot extends LinearOpMode {
     public void robotLifter(){
         LowerRobot();
         upLifter();
-        //Lock();
     }
 
     public void robotDrive(double driveSpeed, double leftInches, double rightInches, double timeout) {
@@ -182,11 +162,6 @@ public class AutoDepot extends LinearOpMode {
         double inches = (rightDegrees * WHEEL_SEPARATION/2 * 3.1415926 / 180)/2;
         robotDrive(DRIVE_SPEED, inches*2, -inches*2,0);
     }
-    public void robotSteps(){
-
-      pathOne();
-
-    }
 
     private void pathFour() {
         robotDrive(DRIVE_SPEED,3,3,0);
@@ -209,19 +184,22 @@ public class AutoDepot extends LinearOpMode {
 
 
 
-    private void pathOne() {
-        robotDrive(.2,2,2,0);
+    public void robotSteps() {
+        robotDrive(.2,2,2,5);
         robotTurn(.3,45);
-        //robotDrive(DRIVE_SPEED, 30,30);
-        //robotTurn(TURN_SPEED, -45);
-        //robotDrive(DRIVE_SPEED, 15,15);
-        //robotTurn(DRIVE_SPEED, 45);
-        robotDrive(DRIVE_SPEED, 38,38,0);
-       //robotDrive(DRIVE_SPEED,-5,-5,0);
+        robotDrive(DRIVE_SPEED, 38,38,10);
         robotTurn(TURN_SPEED,80);
-        robotDrive(DRIVE_SPEED, 15,15,0);
-        //robotTurn(.3, -40);
-        markerDropArm(1);
+        robotDrive(DRIVE_SPEED, 15,15,5);
+
+        markerDropArm();
+        //marker dropped
+
+        //Spin
+        robotDrive(.3,3,-3,0);
+
+        //Drive
+        robotDrive(.7, -60,-60,0);
+
     }
 
     @Override
@@ -242,6 +220,7 @@ public class AutoDepot extends LinearOpMode {
 
         robotLifter();
         robotSteps();
+        //keep rover on creator
         while(opModeIsActive()){
             robot.left_drive.setPower(-.4);
             robot.left_drive.setPower(-.4);
