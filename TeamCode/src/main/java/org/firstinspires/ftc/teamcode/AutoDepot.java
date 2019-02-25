@@ -17,16 +17,11 @@ public class AutoDepot extends LinearOpMode {
     static final double     DRIVE_GEAR_REDUCTION    = 2 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 6.75 ;// For figuring circumference
     static final double     WHEEL_SEPARATION = 15.25 ;
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double     COUNTS_PER_INCH         = COUNTS_PER_MOTOR_REV / (WHEEL_DIAMETER_INCHES * 3.14159265359);
     static final double     DRIVE_SPEED             = 0.45;
     static final double     TURN_SPEED              = 0.3;
     static final double     TIME_PER_INCH           = 0.5;
     int pathSel = 1;
-    public double leftAbort;
-    public double rightAbort;
-    public double abortTime;
-
 
     public void markerDropArm(){
         robot.collector.setPower(-1);
@@ -45,7 +40,7 @@ public class AutoDepot extends LinearOpMode {
         robot.marker_servo.setPosition(4.5);
         sleep(1200);
         robot.marker_servo.setPosition(.5);
-        robotDrive(.75, -73,-73,0);
+        robotDrive(.75, -73,-73,0, "");
     }
 
     public void Lock(){
@@ -87,15 +82,8 @@ public class AutoDepot extends LinearOpMode {
         lifterGoUpSlightly();
     }
 
-    public void robotDrive(double driveSpeed, double leftInches, double rightInches, double timeout) {
-
-        //if(timeout == 0){
-         //   leftAbort = (leftInches/driveSpeed)*TIME_PER_INCH;
-          //  rightAbort = (rightInches/driveSpeed)*TIME_PER_INCH;
-       // } else {
-        //    leftAbort = timeout;
-        //    rightAbort = timeout;
-        //}
+    public void robotDrive(double driveSpeed, double leftInches, double rightInches, double timeout, String description) {
+        Show(description);
 
         robot.left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -114,9 +102,18 @@ public class AutoDepot extends LinearOpMode {
         robot.left_drive.setPower(Math.abs(driveSpeed));
         robot.right_drive.setPower(Math.abs(driveSpeed));
 
-        abortTime = getRuntime();
-        while(opModeIsActive() && (robot.left_drive.isBusy() || robot.right_drive.isBusy())) {
+        ElapsedTime runtime = new ElapsedTime();
+
+        while(
+                opModeIsActive()
+                && (robot.left_drive.isBusy() || robot.right_drive.isBusy()) // either drive is busy
+//                && (timeout=0.0 || runtime.seconds() < timeout)
+                && runtime.seconds() < timeout
+        ) {
             sleep(100);
+            telemetry.addData("Step", description);
+            telemetry.addData("Timeout", "%.1f", runtime.seconds());
+            telemetry.update();
         }
 
         robot.left_drive.setPower(0);
@@ -126,12 +123,12 @@ public class AutoDepot extends LinearOpMode {
         robot.right_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void robotTurn(double DRIVE_SPEED,double rightDegrees, double timeout){
+    public void robotTurn(double DRIVE_SPEED,double rightDegrees, double timeout,String description){
         double inches = (rightDegrees * WHEEL_SEPARATION/2 * 3.1415926 / 180)/2;
-        robotDrive(DRIVE_SPEED, inches*2, -inches*2,timeout);
+        robotDrive(DRIVE_SPEED, inches*2, -inches*2,timeout, description);
     }
 
-    private void pathFour() {
+     /*private void pathFour() {
         robotDrive(DRIVE_SPEED,3,3,0);
         robotTurn(TURN_SPEED,90,3);
         sleep(5000);
@@ -149,25 +146,23 @@ public class AutoDepot extends LinearOpMode {
         sleep(2000);
         robotDrive(DRIVE_SPEED,-22,-22,0);
     }
-
+*/
 
 
     public void robotSteps() {
-        Show("Moving to Depot");
-        robotDrive(.2,2,2,5);
-        robotTurn(.3,45,1.5);
-        robotDrive(DRIVE_SPEED, 38,38,10);
-        robotTurn(TURN_SPEED,80,3);
-        robotDrive(DRIVE_SPEED, 15,15,5);
+        robotDrive(.2,2,2,5, "Moving to Depot 2in");
+        robotTurn(.3,45,1.5,"Moving to Depot Turn 45R");
+        robotDrive(DRIVE_SPEED, 38,38,10,"Moving to Depot 38in");
+        robotTurn(TURN_SPEED,80,3,"Moving to Depot 80R");
+        robotDrive(DRIVE_SPEED, 15,15,5,"Moving to Depot 15in");
 
         Show ("Droping Marker");
         markerDropArm();
 
-        Show("spinning towrds \"Crator\"");
-        robotDrive(.3,3,-3,10);
+        robotDrive(.3,3,-3,10,"spinning towrds \"Crator\"");
 
-        Show("Driving Towrds opponents \"Crator\"");
-        robotDrive(.7, -60,-60,20);
+        robotDrive(.7, -60,-60,20,
+                "Driving Towrds opponents \"Crator\"");
     }
 
     protected void Show(String message) {
@@ -184,7 +179,7 @@ public class AutoDepot extends LinearOpMode {
         robot.marker_servo.setPosition(.5);
 
 
-
+        Show("Waiting For Start!");
 
 
         // Wait for the game to start (driver presses PLAY)
@@ -194,6 +189,7 @@ public class AutoDepot extends LinearOpMode {
         activateLifter();
         robotSteps();
         //keep rover on creator
+        Show("Wainting for end");
         while(opModeIsActive()){
             robot.left_drive.setPower(-.4);
             robot.left_drive.setPower(-.4);
