@@ -29,15 +29,18 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
 import android.text.style.BulletSpan;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 /**
  * This file contains an example of an iterative (Non-Linear) "OpMode".
@@ -54,10 +57,12 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="TeleOpBase", group="Iterative Opmode")
+@TeleOp(name="Nate's copy of Ben's TeleOpBase", group="Iterative Opmode")
 public class TeleOpBase extends OpMode
+
+
 {
-    // Declare OpMode members.
+   // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left_drive = null;
     private DcMotor right_drive = null;
@@ -65,7 +70,7 @@ public class TeleOpBase extends OpMode
     private DcMotor CollAjust = null;
     private Servo lifter_lock = null;
     private Servo marker_servo = null;
-
+    private ColorSensor sensor = null;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -81,6 +86,7 @@ public class TeleOpBase extends OpMode
         CollAjust = hardwareMap.get(DcMotor.class, "collector");
         lifter_lock = hardwareMap.get(Servo.class, "lifter_lock");
         marker_servo = hardwareMap.get(Servo.class, "marker_servo");
+        sensor = hardwareMap.get(ColorSensor.class, "sensor");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -89,7 +95,7 @@ public class TeleOpBase extends OpMode
         lifter.setDirection(DcMotor.Direction.REVERSE);
 
         // Tell the driver that initialization is complete.
-        telemetry.addData("Status", "Self Destruction Sequence Activated");
+        telemetry.addData("Status", "System overload, initializing Self Destruction Sequence Activated");
     }
 
     /*
@@ -112,13 +118,20 @@ public class TeleOpBase extends OpMode
      */
 
     @Override
-    public void loop() {
 
+    public void loop() {
         move();
         doLifter();
         doCollector();
         lock_lifter();
         dropMarker();
+        float hsvValues[] = {0F, 0F, 0F};
+        final float vlaues [] = hsvValues;
+        Color.RGBToHSV(sensor.red() *8,sensor.green() *8, sensor.blue() *8, hsvValues);
+        telemetry.addData("Red", sensor.red());
+        telemetry.addData("Green", sensor.green());
+        telemetry.addData("Blue", sensor.green());
+        telemetry.update();
     }
 
     private void doCollector() {
