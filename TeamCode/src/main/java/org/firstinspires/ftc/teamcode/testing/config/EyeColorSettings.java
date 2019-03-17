@@ -39,7 +39,7 @@ public class EyeColorSettings extends Settings {
 
 		double timeoutS = this.duration.getCur();
 
-		ColorSensor eye = this.eye.getCur() == "left" ? bot.left_eye : bot.right_eye;
+		ColorSensor eye = null;//this.eye.getCur() == "left" ? bot.left_eye : bot.right_eye;
 
 		boolean ledOn = led.getCur()=="on";
 		eye.enableLed( ledOn );

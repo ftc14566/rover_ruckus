@@ -14,8 +14,8 @@ public class HardwareTractor {
 	public DcMotor lifter;
 	public DcMotor collector;
 
-	public ColorSensor left_eye;
-	public ColorSensor right_eye;
+//	public ColorSensor left_eye;
+//	public ColorSensor right_eye;
 
 	public void init(HardwareMap hardwareMap){
 
@@ -32,10 +32,36 @@ public class HardwareTractor {
 		marker_servo = hardwareMap.get(Servo.class, "marker_servo");
 		lifter_lock = hardwareMap.get(Servo.class, "lifter_lock");
 
-		left_eye = hardwareMap.get(ColorSensor.class,"left_eye");
-		right_eye = hardwareMap.get(ColorSensor.class, "right_eye");
+	//	left_eye = hardwareMap.get(ColorSensor.class,"left_eye");
+	//	right_eye = hardwareMap.get(ColorSensor.class, "right_eye");
 
 	}
+	static final double lockposition = 0.43;
+	static final double UnlockPosition = 0.56;
+
+	public void UnlockLiftrer() {
+		lifter_lock.setPosition(UnlockPosition);
+	}
+
+	public void LockLifter() {
+		lifter_lock.setPosition(lockposition);
+	}
+	public void Lift() {
+		lifter.setPower(0.5);
+	}
+	public void Lower() {
+		lifter.setPower(LoweringPower );
+
+	}
+	public void LifterOff() {
+		lifter.setPower(0);
+	}
+	public void ExtendLifter() {
+		lifter.setPower(-.2);
+	}
+
+
+	static final double LoweringPower = 0.02;
+
 
 }
-

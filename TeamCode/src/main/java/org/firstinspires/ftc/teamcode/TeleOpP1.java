@@ -28,42 +28,23 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Nate's copy of Ben's TeleOpBase P2", group="Iterative Opmode")
-public class TeleOpBase extends OpMode
+@TeleOp(name="Nate's copy of Ben's TeleOpBase P1", group="Iterative Opmode")
+public class TeleOpP1 extends OpMode
 
 
 {
-   // Declare OpMode members.
+    // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor left_drive = null;
-    private DcMotor right_drive = null;
-    private DcMotor lifter = null;
-    private DcMotor CollAjust = null;
-    private Servo lifter_lock = null;
-    private Servo marker_servo = null;
-    private ColorSensor sensor = null;
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
-
+    private HardwareTractor bot = null;
     @Override
     public void init() {
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        left_drive  = hardwareMap.get(DcMotor.class, "left_drive");
-        right_drive = hardwareMap.get(DcMotor.class, "right_drive");
-        lifter = hardwareMap.get(DcMotor.class,"lifter");
-        CollAjust = hardwareMap.get(DcMotor.class, "collector");
-        lifter_lock = hardwareMap.get(Servo.class, "lifter_lock");
-        marker_servo = hardwareMap.get(Servo.class, "marker_servo");
-        sensor = hardwareMap.get(ColorSensor.class, "sensor");
-
+        bot = new HardwareTractor();
+        bot.init(hardwareMap);
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        left_drive.setDirection(DcMotor.Direction.FORWARD);
-        right_drive.setDirection(DcMotor.Direction.REVERSE);
-        lifter.setDirection(DcMotor.Direction.REVERSE);
+        bot.left_drive.setDirection(DcMotor.Direction.FORWARD);
+        bot.right_drive.setDirection(DcMotor.Direction.REVERSE);
+        bot.lifter.setDirection(DcMotor.Direction.REVERSE);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "System overload, initializing Self Destruction Sequence Activated");
@@ -95,7 +76,7 @@ public class TeleOpBase extends OpMode
         doLifter();
         doCollector();
         lock_lifter();
-        dropMarker();
+      //  dropMarker();
         /*float hsvValues[] = {0F, 0F, 0F};
         Color.RGBToHSV(sensor.red() *8,sensor.green() *8, sensor.blue() *8, hsvValues);
         final float vlaues [] = hsvValues;
@@ -105,51 +86,126 @@ public class TeleOpBase extends OpMode
         telemetry.update();*/
     }
 
+    private boolean bumperPressed = false;
+    private boolean collectorOn = true;
     private void doCollector() {
-        float CollAjustraw = gamepad2.right_stick_y;
-        float CollAjustbackraw = -gamepad2.right_stick_y;
-
-        double CollAjustData = Range.clip(CollAjustraw + 0, -1, 1);
-        double CollAjustBackData = Range.clip(CollAjustbackraw + 0, -1, 1);
-        double CollMot = Range.clip(CollAjustData - CollAjustBackData, -.5, .5);
-
-        if(CollMot == 0){
-            CollMot = -.2;
+        if (bumperPressed == false && gamepad1.left_bumper){
+            collectorOn = !collectorOn;
         }
+        bumperPressed = gamepad1.left_bumper;
 
-        CollAjust.setPower(CollMot);
+        if (collectorOn) {
+
+
+            float CollAjustraw = gamepad1.right_stick_y;
+            float CollAjustbackraw = -gamepad1.right_stick_y;
+
+            double CollAjustData = Range.clip(CollAjustraw + 0, -1, 1);
+            double CollAjustBackData = Range.clip(CollAjustbackraw + 0, -1, 1);
+            double CollMot = Range.clip(CollAjustData - CollAjustBackData, -.5, .5);
+
+            if (CollMot == 0) {
+                CollMot = -0.2;
+            }
+
+            bot.collector.setPower(CollMot);
+        }
+        else {
+            bot.collector.setPower(0);
+        }
     }
 
-     private void doLifter() {
-         //Lifter To-Do:
-         //Get lifter design from builders
-         //Write code that operates the lifter
-         //Connect the lifter to a button on the controller
+    private String lifterState = "inactive";
+    private ElapsedTime lifterTime = new ElapsedTime();
 
-         float LifterYes = gamepad2.left_stick_y;
-         float LifterOpp = 0;
-         double LiftScale = .8;
+    private void doLifter() {
 
-         double LifterActivate = Range.clip(LifterYes * LiftScale - LifterOpp * LiftScale, -1, 1);
+        switch (lifterState) {
+            case "inactive": doLifterInactive(); break;
+            case "lifting": doLifterLifting(); break;
+            case "lowering": dolifterlowering(); break;
+            case "locking": doLifterLocking(); break;
+            case "extending": doLifterExtending(); break;
 
-         lifter.setPower(LifterActivate);
+        }
+    }
 
-     }
+    private void doLifterExtending(){
+        if (lifterTime.seconds() >= 2){
+            bot.LifterOff();
+            lifterState = "inactive";
+        }
+    }
 
-     private void lock_lifter() {
-         boolean lock = gamepad2.dpad_right;
-         boolean unlock = gamepad2.dpad_left;
+    private void doLifterLocking(){
+        if (lifterTime.seconds() >=1){
+            lifterState = "inactive";
+            bot.LifterOff();
+        }
 
-         if (lock == true) {
-             lifter.setPower(.3);
-             lifter_lock.setPosition(.43);
-         }
-         if (unlock == true) {
-             lifter_lock.setPosition(.56);
-         }
-     }
+    }
 
-     private void dropMarker(){
+    private void doLifterInactive(){
+
+        if (gamepad1.a){
+            lifterState = "lifting";
+            bot.Lift();
+            lifterTime.reset();
+        }
+
+        else if (gamepad1.x){
+            lifterState = "lowering";
+            bot.Lower();
+            bot.UnlockLiftrer();
+            lifterTime.reset();
+        }
+        else if (gamepad1.y){
+            lifterState = "extending";
+            lifterTime.reset();
+            bot.ExtendLifter();
+        }
+    }
+
+
+
+    private void doLifterLifting(){
+        if (gamepad1.a == false){
+            lifterState = "lowering";
+            bot.Lower();
+            lifterTime.reset();
+
+        }
+        else if (lifterTime.seconds() >= 3.0){
+            lifterState = "locking";
+            bot.LockLifter();
+            lifterTime.reset();
+        }
+    }
+
+
+    private void lock_lifter() {
+        boolean lock = gamepad1.dpad_right;
+        boolean unlock = gamepad1.dpad_left;
+
+        if (lock) {
+            bot.lifter.setPower(.3);
+            bot.LockLifter();
+        }
+        if (unlock) {
+            bot.UnlockLiftrer();
+        }
+    }
+
+    private void dolifterlowering() {
+
+        if (lifterTime.seconds() >= 3.0){
+            lifterState = "inactive";
+            bot.LifterOff();
+          }
+    }
+
+
+   /* private void dropMarker(){
         boolean markerUp = gamepad2.dpad_up;
         boolean markerDown = gamepad2.dpad_down;
 
@@ -159,7 +215,7 @@ public class TeleOpBase extends OpMode
         if(markerDown == true){
             marker_servo.setPosition(0);
         }
-     }
+    }*/
 
     private void move() {
         double scale = .5; //Sets scale to .5
@@ -176,8 +232,8 @@ public class TeleOpBase extends OpMode
         double RightMotPower = Range.clip(Drive - Turn, -1, 1) * scale; //Keeps motor power inside -1 and 1
 
 
-        left_drive.setPower(LeftMotPower); //Renames variables to work with RC phone's config
-        right_drive.setPower(RightMotPower); //Renames variables to work with RC phone's config
+        bot.left_drive.setPower(LeftMotPower); //Renames variables to work with RC phone's config
+        bot.right_drive.setPower(RightMotPower); //Renames variables to work with RC phone's config
     }
     /*
      * Code to run ONCE after the driver hits STOP
