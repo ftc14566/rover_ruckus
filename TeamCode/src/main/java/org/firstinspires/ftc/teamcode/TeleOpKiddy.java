@@ -1,17 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Color;
-import android.text.style.BulletSpan;
+        import android.graphics.Color;
+        import android.text.style.BulletSpan;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+        import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+        import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+        import com.qualcomm.robotcore.hardware.DcMotor;
+        import com.qualcomm.robotcore.hardware.Servo;
+        import com.qualcomm.robotcore.util.ElapsedTime;
+        import com.qualcomm.robotcore.util.Range;
+        import com.qualcomm.robotcore.hardware.ColorSensor;
 
 /**
  * This file contains an example of an iterative (Non-Linear) "OpMode".
@@ -28,8 +28,8 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Nate's copy of Ben's TeleOpBase P1", group="Iterative Opmode")
-public class TeleOpP1 extends OpMode
+@TeleOp(name="TeleOpBaseKiddy", group="Iterative Opmode")
+public class TeleOpKiddy extends OpMode
 
 
 {
@@ -74,10 +74,10 @@ public class TeleOpP1 extends OpMode
 
     public void loop() {
         move();
-        doLifter();
-        doCollector();
-        lock_lifter();
-      //  dropMarker();
+        // doLifter();
+        //doCollector();
+        //lock_lifter();
+        //  dropMarker();
         /*float hsvValues[] = {0F, 0F, 0F};
         Color.RGBToHSV(sensor.red() *8,sensor.green() *8, sensor.blue() *8, hsvValues);
         final float vlaues [] = hsvValues;
@@ -87,7 +87,7 @@ public class TeleOpP1 extends OpMode
         telemetry.update();*/
     }
 
-    private boolean bumperPressed = false;
+   /* private boolean bumperPressed = false;
     private boolean collectorOn = true;
     private void doCollector() {
         if (bumperPressed == false && gamepad1.left_bumper){
@@ -176,7 +176,7 @@ public class TeleOpP1 extends OpMode
             lifterTime.reset();
 
         }
-        else if (lifterTime.seconds() >= 5){
+        else if (lifterTime.seconds() >= 3.0){
             lifterState = "locking";
             bot.LockLifter();
             lifterTime.reset();
@@ -202,7 +202,7 @@ public class TeleOpP1 extends OpMode
         if (lifterTime.seconds() >= 3.0){
             lifterState = "inactive";
             bot.LifterOff();
-          }
+        }
     }
 
 
@@ -229,8 +229,8 @@ public class TeleOpP1 extends OpMode
             scale = 1;
         }
 
-        double LeftMotPower = Range.clip(Drive + Turn, -1, 1) * scale; //Keeps the motor power inside -1 and 1
-        double RightMotPower = Range.clip(Drive - Turn, -1, 1) * scale; //Keeps motor power inside -1 and 1
+        double LeftMotPower = Range.clip(Drive + Turn, -0.25, 0.25) * scale; //Keeps the motor power inside -1 and 1
+        double RightMotPower = Range.clip(Drive - Turn, -0.25, 0.25) * scale; //Keeps motor power inside -1 and 1
 
 
         bot.left_drive.setPower(LeftMotPower); //Renames variables to work with RC phone's config
