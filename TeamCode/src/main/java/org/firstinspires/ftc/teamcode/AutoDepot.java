@@ -1,31 +1,3 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
 
 package org.firstinspires.ftc.teamcode;
 
@@ -41,11 +13,6 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
-// This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- // the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- // of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
- // class is instantiated on the Robot Controller and executed.
-
 
 @Autonomous(name="AutoDepot", group="Linear Opmode")
 //Disabled
@@ -55,8 +22,7 @@ public class AutoDepot extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     static final double     COUNTS_PER_MOTOR_REV    = 288 ;
-    static final double     DRIVE_GEAR_REDUCTION    = 2 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 6.75 ;// For figuring circumference
+     static final double     WHEEL_DIAMETER_INCHES   = 6.75 ;// For figuring circumference
     static final double     WHEEL_SEPARATION = 15.25 ;
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -81,15 +47,15 @@ public class AutoDepot extends LinearOpMode {
         robot.collector.setPower(-.2);
         if(robotPath == 1){
             //robotTurn(.5, 15);
-            robotDrive(.3,3,-3,0);
-            robotDrive(.7, -60,-60,0);
+            robot.robotDrive(this,.3,3,-3,0);
+            robot.robotDrive(this,.7, -60,-60,0);
            // robotTurn(.3, -5);
             //robotDrive(.7, -20,-20,0);
         }
         if(robotPath == 2) {
-            robotDrive(.3,-1.5,1.5,0);
+            robot.robotDrive(this,.3,-1.5,1.5,0);
             //robotTurn(.5, -12);
-            robotDrive(.7, -60, -60, 0);
+            robot.robotDrive(this,.7, -60, -60, 0);
             //robotTurn(.3, 5);
             //robotDrive(.7, -20, -20, 0);
         }
@@ -99,7 +65,7 @@ public class AutoDepot extends LinearOpMode {
         robot.marker_servo.setPosition(4.5);
         sleep(1200);
         robot.marker_servo.setPosition(.5);
-        robotDrive(.75, -73,-73,0);
+        robot.robotDrive(this,.75, -73,-73,0);
     }
 
     public void Lock(){
@@ -178,48 +144,28 @@ public class AutoDepot extends LinearOpMode {
         robot.right_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void robotTurn(double DRIVE_SPEED,double rightDegrees ){
-        double inches = (rightDegrees * WHEEL_SEPARATION/2 * 3.1415926 / 180)/2;
-        robotDrive(DRIVE_SPEED, inches*2, -inches*2,0);
-    }
+
     public void robotSteps(){
 
       pathOne();
 
     }
 
-    private void pathFour() {
-        robotDrive(DRIVE_SPEED,3,3,0);
-        robotTurn(TURN_SPEED,90);
-        sleep(5000);
-        robotDrive(DRIVE_SPEED,45,45,0);
-        robot.marker_servo.setPosition(0);
-        sleep(2000);
-        robotDrive(DRIVE_SPEED,-22,-22,0);
-    }
 
-    private void pathThree() {
-        robotDrive(DRIVE_SPEED,3,3,0);
-        robotTurn(TURN_SPEED,90);
-        robotDrive(DRIVE_SPEED,45,45,0);
-        robot.marker_servo.setPosition(0);
-        sleep(2000);
-        robotDrive(DRIVE_SPEED,-22,-22,0);
-    }
 
 
 
     private void pathOne() {
-        robotDrive(.2,2,2,0);
-        robotTurn(.3,45);
+        robot.robotDrive(this,.2,2,2,0);
+        robot.robotTurn(this,.3,45);
         //robotDrive(DRIVE_SPEED, 30,30);
         //robotTurn(TURN_SPEED, -45);
         //robotDrive(DRIVE_SPEED, 15,15);
         //robotTurn(DRIVE_SPEED, 45);
-        robotDrive(DRIVE_SPEED, 38,38,0);
+        robot.robotDrive(this,DRIVE_SPEED, 38,38,0);
        //robotDrive(DRIVE_SPEED,-5,-5,0);
-        robotTurn(TURN_SPEED,80);
-        robotDrive(DRIVE_SPEED, 15,15,0);
+        robot.robotTurn(this,TURN_SPEED,80);
+        robot.robotDrive(this,DRIVE_SPEED, 15,15,0);
         //robotTurn(.3, -40);
         markerDropArm(1);
     }
@@ -236,7 +182,6 @@ public class AutoDepot extends LinearOpMode {
 
 
 
-        // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
