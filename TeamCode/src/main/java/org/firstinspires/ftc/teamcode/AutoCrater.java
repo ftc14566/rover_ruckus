@@ -10,17 +10,11 @@ public class AutoCrater extends AutoDepot {
         pathTwo();
     }
     protected void pathTwo() {
-        robotDrive(.2,2,2,0);
-        robotTurn(.3,43);
-        //robotDrive(DRIVE_SPEED, 30,30);
-        //robotTurn(TURN_SPEED, -45);
-        //robotDrive(DRIVE_SPEED, 15,15);
-        //robotTurn(DRIVE_SPEED, 45);
-        robotDrive(DRIVE_SPEED, 38, 38,0);
-        //robotDrive(DRIVE_SPEED,-5,-5);
-        robotTurn(TURN_SPEED,-85 );
-        robotDrive(DRIVE_SPEED,50,50,0);
-        //robotTurn(.3, 40);
+        robot.robotDrive(this, .2, 2, 2, 0);
+        robot.robotTurn(this, .3,43);
+        robot.robotDrive(this, DRIVE_SPEED, 38, 38,0);
+        robot.robotTurn(this, TURN_SPEED,-85 );
+        robot.robotDrive(this, DRIVE_SPEED, 50, 50, 0);
 
         markerDropArm(2);
     }

@@ -41,11 +41,6 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
-// This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- // the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- // of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
- // class is instantiated on the Robot Controller and executed.
-
 
 @Autonomous(name="AutoDepot", group="Linear Opmode")
 //Disabled
@@ -55,7 +50,6 @@ public class AutoDepot extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     static final double     COUNTS_PER_MOTOR_REV    = 288 ;
-    static final double     DRIVE_GEAR_REDUCTION    = 2 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 6.75 ;// For figuring circumference
     static final double     WHEEL_SEPARATION = 15.25 ;
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV) /
@@ -81,15 +75,15 @@ public class AutoDepot extends LinearOpMode {
         robot.collector.setPower(-.2);
         if(robotPath == 1){
             //robotTurn(.5, 15);
-            robotDrive(.3,3,-3,0);
-            robotDrive(.7, -60,-60,0);
+            robot.robotDrive(this, .3,3,-3,0);
+            robot.robotDrive(this, .7, -60,-60,0);
            // robotTurn(.3, -5);
             //robotDrive(.7, -20,-20,0);
         }
         if(robotPath == 2) {
-            robotDrive(.3,-1.5,1.5,0);
+            robot.robotDrive(this, .3,-1.5,1.5,0);
             //robotTurn(.5, -12);
-            robotDrive(.7, -60, -60, 0);
+            robot.robotDrive(this, .7, -60, -60, 0);
             //robotTurn(.3, 5);
             //robotDrive(.7, -20, -20, 0);
         }
@@ -99,7 +93,7 @@ public class AutoDepot extends LinearOpMode {
         robot.marker_servo.setPosition(4.5);
         sleep(1200);
         robot.marker_servo.setPosition(.5);
-        robotDrive(.75, -73,-73,0);
+        robot.robotDrive(this, .75, -73,-73,0);
     }
 
     public void Lock(){
@@ -139,88 +133,18 @@ public class AutoDepot extends LinearOpMode {
         //Lock();
     }
 
-    public void robotDrive(double driveSpeed, double leftInches, double rightInches, double timeout) {
-
-        //if(timeout == 0){
-         //   leftAbort = (leftInches/driveSpeed)*TIME_PER_INCH;
-          //  rightAbort = (rightInches/driveSpeed)*TIME_PER_INCH;
-       // } else {
-        //    leftAbort = timeout;
-        //    rightAbort = timeout;
-        //}
-
-        robot.left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.left_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.right_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        int newLeftTarget = robot.left_drive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-        int newRightTarget = robot.right_drive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-         robot.left_drive.setTargetPosition(newLeftTarget);
-        robot.right_drive.setTargetPosition(newRightTarget);
-
-        robot.left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        robot.left_drive.setPower(Math.abs(driveSpeed));
-        robot.right_drive.setPower(Math.abs(driveSpeed));
-
-        abortTime = getRuntime();
-        while(opModeIsActive() && (robot.left_drive.isBusy() || robot.right_drive.isBusy())) {
-            sleep(100);
-        }
-
-        robot.left_drive.setPower(0);
-        robot.right_drive.setPower(0);
-        //sleep(0020);
-        robot.left_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.right_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    public void robotTurn(double DRIVE_SPEED,double rightDegrees ){
-        double inches = (rightDegrees * WHEEL_SEPARATION/2 * 3.1415926 / 180)/2;
-        robotDrive(DRIVE_SPEED, inches*2, -inches*2,0);
-    }
     public void robotSteps(){
 
       pathOne();
 
     }
 
-    private void pathFour() {
-        robotDrive(DRIVE_SPEED,3,3,0);
-        robotTurn(TURN_SPEED,90);
-        sleep(5000);
-        robotDrive(DRIVE_SPEED,45,45,0);
-        robot.marker_servo.setPosition(0);
-        sleep(2000);
-        robotDrive(DRIVE_SPEED,-22,-22,0);
-    }
-
-    private void pathThree() {
-        robotDrive(DRIVE_SPEED,3,3,0);
-        robotTurn(TURN_SPEED,90);
-        robotDrive(DRIVE_SPEED,45,45,0);
-        robot.marker_servo.setPosition(0);
-        sleep(2000);
-        robotDrive(DRIVE_SPEED,-22,-22,0);
-    }
-
-
-
     private void pathOne() {
         robotDrive(.2,2,2,0);
-        robotTurn(.3,45);
-        //robotDrive(DRIVE_SPEED, 30,30);
-        //robotTurn(TURN_SPEED, -45);
-        //robotDrive(DRIVE_SPEED, 15,15);
-        //robotTurn(DRIVE_SPEED, 45);
-        robotDrive(DRIVE_SPEED, 38,38,0);
-       //robotDrive(DRIVE_SPEED,-5,-5,0);
-        robotTurn(TURN_SPEED,80);
-        robotDrive(DRIVE_SPEED, 15,15,0);
-        //robotTurn(.3, -40);
+        robot.robotTurn(this, .3,45);
+        robot.robotDrive(this, DRIVE_SPEED, 38,38,0);
+        robot.robotTurn(this, TURN_SPEED,80);
+        robot.robotDrive(this, DRIVE_SPEED, 15,15,0);
         markerDropArm(1);
     }
 
