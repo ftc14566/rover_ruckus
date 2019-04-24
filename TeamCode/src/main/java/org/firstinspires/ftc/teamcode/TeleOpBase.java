@@ -59,34 +59,14 @@ public class TeleOpBase extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor left_drive = null;
-    private DcMotor right_drive = null;
-    private DcMotor lifter = null;
-    private DcMotor CollAjust = null;
-    private Servo lifter_lock = null;
-    private Servo marker_servo = null;
 
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
+    private HardwareTractor hardware;
 
     @Override
     public void init() {
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        left_drive  = hardwareMap.get(DcMotor.class, "left_drive");
-        right_drive = hardwareMap.get(DcMotor.class, "right_drive");
-        lifter = hardwareMap.get(DcMotor.class,"lifter");
-        CollAjust = hardwareMap.get(DcMotor.class, "collector");
-        lifter_lock = hardwareMap.get(Servo.class, "lifter_lock");
-        marker_servo = hardwareMap.get(Servo.class, "marker_servo");
 
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        left_drive.setDirection(DcMotor.Direction.FORWARD);
-        right_drive.setDirection(DcMotor.Direction.REVERSE);
-        lifter.setDirection(DcMotor.Direction.REVERSE);
+        hardware = new HardwareTractor();
+        hardware.init( hardwareMap );
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Self Destruction Sequence Activated");
@@ -133,7 +113,7 @@ public class TeleOpBase extends OpMode
             CollMot = -.2;
         }
 
-        CollAjust.setPower(CollMot);
+        hardware.collector.setPower(CollMot);
     }
 
      private void doLifter() {
@@ -148,32 +128,28 @@ public class TeleOpBase extends OpMode
 
          double LifterActivate = Range.clip(LifterYes * LiftScale - LifterOpp * LiftScale, -1, 1);
 
-         lifter.setPower(LifterActivate);
+         hardware.lifter.setPower(LifterActivate);
 
      }
 
      private void lock_lifter() {
-         boolean lock = gamepad2.dpad_right;
-         boolean unlock = gamepad2.dpad_left;
 
-         if (lock == true) {
-             lifter.setPower(.3);
-             lifter_lock.setPosition(.43);
+         if (gamepad2.dpad_right) {
+             hardware.lifter.setPower(.3);
+             hardware.lockLifter();
          }
-         if (unlock == true) {
-             lifter_lock.setPosition(.56);
+         else if ( gamepad2.dpad_left ) {
+             hardware.unlockLifter();
          }
      }
 
-     private void dropMarker(){
-        boolean markerUp = gamepad2.dpad_up;
-        boolean markerDown = gamepad2.dpad_down;
 
-        if(markerUp == true){
-            marker_servo.setPosition(100);
+    private void dropMarker(){
+        if( gamepad2.dpad_up ){
+            hardware.raiseMarkerArm();
         }
-        if(markerDown == true){
-            marker_servo.setPosition(0);
+        else if( gamepad2.dpad_down ){
+            hardware.dropMarkerNow();
         }
      }
 
@@ -192,8 +168,8 @@ public class TeleOpBase extends OpMode
         double RightMotPower = Range.clip(Drive - Turn, -1, 1) * scale; //Keeps motor power inside -1 and 1
 
 
-        left_drive.setPower(LeftMotPower); //Renames variables to work with RC phone's config
-        right_drive.setPower(RightMotPower); //Renames variables to work with RC phone's config
+        hardware.left_drive.setPower(-LeftMotPower); //Renames variables to work with RC phone's config
+        hardware.right_drive.setPower(-RightMotPower); //Renames variables to work with RC phone's config
     }
     /*
      * Code to run ONCE after the driver hits STOP

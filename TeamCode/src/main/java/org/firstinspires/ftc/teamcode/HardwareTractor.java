@@ -1,9 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.eventloop.opmode.*;
 
 // All the hardware on our Tractor-bot
 public class HardwareTractor {
+
+	static final double     WHEEL_SEPARATION = 15.25 ;
+	static final double     WHEEL_DIAMETER_INCHES   = 6.75 ;// For figuring circumference
+	static final double     COUNTS_PER_MOTOR_REV    = 288 ;
+	static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV) /
+			(WHEEL_DIAMETER_INCHES * 3.1415);
+
 
 	public DcMotor left_drive;
 	public DcMotor right_drive;
@@ -36,6 +44,60 @@ public class HardwareTractor {
 		right_eye = hardwareMap.get(ColorSensor.class, "right_eye");
 
 	}
+
+	public void dropMarkerNow() {
+		marker_servo.setPosition(0);
+	}
+
+	public void raiseMarkerArm() {
+		marker_servo.setPosition(100);
+	}
+
+	public void unlockLifter() {
+		lifter_lock.setPosition(.56);
+	}
+
+	public void lockLifter() {
+		lifter_lock.setPosition(.43);
+	}
+
+	public void robotDrive(LinearOpMode opMode, double driveSpeed, double leftInches, double rightInches, double timeout) {
+
+		left_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+		right_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+		left_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+		right_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+		int newLeftTarget = left_drive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+		int newRightTarget = right_drive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+		left_drive.setTargetPosition(newLeftTarget);
+		right_drive.setTargetPosition(newRightTarget);
+
+		left_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		right_drive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+		left_drive.setPower(Math.abs(driveSpeed));
+		right_drive.setPower(Math.abs(driveSpeed));
+
+		double abortTime = opMode.getRuntime();
+		while(opMode.opModeIsActive() && (left_drive.isBusy() || right_drive.isBusy())) {
+			opMode.sleep(100);
+		}
+
+		left_drive.setPower(0);
+		right_drive.setPower(0);
+		//sleep(0020);
+		left_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+		right_drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+	}
+
+	public void robotTurn(LinearOpMode opMode, double DRIVE_SPEED,double rightDegrees ){
+		double inches = (rightDegrees * WHEEL_SEPARATION/2 * 3.1415926 / 180)/2;
+		robotDrive(opMode,DRIVE_SPEED, inches*2, -inches*2,0);
+	}
+
+
 
 }
 
