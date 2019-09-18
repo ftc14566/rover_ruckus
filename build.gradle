@@ -9,8 +9,8 @@ buildscript {
         jcenter()
     }
     dependencies {
- HEAD
-        classpath 'com.android.tools.build:gradle:3.5.0'
+<<<<<<< HEAD
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
 allprojects {
@@ -20,10 +20,10 @@ allprojects {
     }
 }
 
-
+=======
         classpath 'com.android.tools.build:gradle:3.4.1'
-
-
+    }
+}
 
 // This is now required because aapt2 has to be downloaded from the
 // google() repository beginning with version 3.2 of the Android Gradle Plugin
@@ -33,4 +33,4 @@ allprojects {
         jcenter()
     }
 }
- e2fcfed1f493a0c361b8095098bf7c67713ff2b2
+>>>>>>> e2fcfed1f493a0c361b8095098bf7c67713ff2b2
